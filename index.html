@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DST Roadmap — ICT Mahidol → FinTech</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f1117;--surface:#1a1d2e;--surface2:#242740;--border:#2e3250;
+  --accent:#6c63ff;--accent2:#48cfad;--accent3:#f7971e;--danger:#ff6b6b;
+  --text:#e8eaf6;--text2:#8b93c4;--success:#48cfad;
+  --y1:#6c63ff;--y2:#48cfad;--y3:#f7971e;--y4:#ff6b6b;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:14px;line-height:1.6;height:100vh;overflow:hidden;}
+a{color:var(--accent2);text-decoration:none;}
+a:hover{text-decoration:underline;}
+
+/* APP LAYOUT */
+.app{display:grid;grid-template-columns:260px 1fr;height:100vh;}
+
+/* SIDEBAR */
+.sidebar{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;position:sticky;top:0;height:100vh;}
+.sidebar-logo{padding:24px 20px 16px;border-bottom:1px solid var(--border);}
+.logo-title{font-size:13px;font-weight:700;color:var(--text);line-height:1.3;}
+.logo-sub{font-size:11px;color:var(--text2);margin-top:2px;}
+.sidebar-section{padding:16px 12px 8px;}
+.sidebar-section-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--text2);padding:0 8px;margin-bottom:6px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:500;color:var(--text2);border-left:3px solid transparent;transition:all .15s;margin-bottom:2px;}
+.nav-item:hover{background:var(--surface2);color:var(--text);}
+.nav-item.active{background:rgba(108,99,255,.12);color:var(--accent);border-left-color:var(--accent);}
+.nav-icon{font-size:15px;width:20px;text-align:center;}
+.sidebar-bottom{margin-top:auto;padding:16px;border-top:1px solid var(--border);}
+.year-pills{display:flex;flex-direction:column;gap:4px;}
+.year-pill{display:flex;align-items:center;gap:8px;font-size:11px;padding:4px 8px;border-radius:6px;color:var(--text2);}
+.pill-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.pill-bar{flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
+.pill-fill{height:100%;border-radius:2px;transition:width .6s ease;}
+.pill-pct{font-size:10px;min-width:28px;text-align:right;}
+
+/* MAIN */
+.main{overflow-y:auto;height:100vh;}
+.page{display:none;padding:32px 36px;max-width:900px;}
+.page.active{display:block;}
+.page-header{margin-bottom:28px;}
+.page-title{font-size:22px;font-weight:700;color:var(--text);}
+.page-sub{font-size:13px;color:var(--text2);margin-top:4px;}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:16px;}
+.card-title{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--text2);margin-bottom:14px;}
+
+/* STATS GRID */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px;text-align:center;}
+.stat-num{font-size:26px;font-weight:700;color:var(--accent);display:block;line-height:1.2;}
+.stat-label{font-size:11px;color:var(--text2);margin-top:4px;}
+
+/* PROGRESS BARS */
+.phase-progress{margin-bottom:10px;}
+.phase-progress-top{display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px;}
+.phase-name{color:var(--text2);}
+.phase-pct{color:var(--text2);}
+.progress-track{height:6px;background:var(--border);border-radius:3px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;transition:width .6s ease;}
+
+/* DAILY ITEMS */
+.daily-item{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:8px;margin-bottom:6px;background:var(--surface2);cursor:pointer;transition:opacity .2s;user-select:none;}
+.daily-item.checked{opacity:.5;}
+.daily-cb{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;}
+.daily-cb.checked{background:var(--success);border-color:var(--success);}
+.daily-cb.checked::after{content:'✓';color:#fff;font-size:11px;font-weight:700;}
+.daily-text{font-size:13px;flex:1;}
+.daily-tag{font-size:10px;padding:2px 8px;border-radius:100px;background:var(--border);color:var(--text2);}
+.daily-progress-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:6px;}
+.daily-fill{height:100%;background:var(--success);border-radius:3px;transition:width .3s;}
+
+/* PHASE CARDS (Roadmap) */
+.phase-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:16px;overflow:hidden;}
+.phase-header{display:flex;align-items:center;gap:14px;padding:16px 20px;cursor:pointer;user-select:none;}
+.phase-header:hover{background:var(--surface2);}
+.phase-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.phase-label{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:3px 10px;border-radius:100px;}
+.phase-header-title{font-size:15px;font-weight:600;flex:1;}
+.phase-count{font-size:12px;color:var(--text2);}
+.phase-arrow{color:var(--text2);transition:transform .25s;font-size:12px;}
+.phase-card.open .phase-arrow{transform:rotate(180deg);}
+.phase-body{display:none;border-top:1px solid var(--border);}
+.phase-card.open .phase-body{display:block;}
+
+/* COURSE CARDS */
+.course-card{border-bottom:1px solid var(--border);transition:background .15s;}
+.course-card:last-child{border-bottom:none;}
+.course-card.done .course-name{text-decoration:line-through;color:var(--text2);}
+.course-row{display:flex;align-items:flex-start;gap:12px;padding:14px 20px;cursor:pointer;}
+.course-cb{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;transition:all .2s;}
+.course-cb.checked{background:var(--success);border-color:var(--success);}
+.course-cb.checked::after{content:'✓';color:#fff;font-size:11px;font-weight:700;}
+.course-info{flex:1;min-width:0;}
+.course-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:2px;}
+.course-code{font-size:10px;background:var(--border);color:var(--text2);padding:2px 7px;border-radius:4px;font-family:monospace;}
+.course-extra-badge{font-size:10px;background:rgba(247,151,30,.15);color:var(--accent3);padding:2px 7px;border-radius:4px;}
+.course-name{font-size:13px;font-weight:600;}
+.course-desc{font-size:12px;color:var(--text2);margin-top:2px;}
+.course-expand-icon{color:var(--text2);flex-shrink:0;font-size:11px;transition:transform .2s;margin-top:4px;}
+.course-card.expanded .course-expand-icon{transform:rotate(180deg);}
+.course-body{display:none;padding:12px 20px 16px 50px;border-top:1px solid var(--border);}
+.course-card.expanded .course-body{display:block;}
+.res-title{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--text2);margin:12px 0 7px;}
+.res-item{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;font-size:12px;}
+.res-tag{font-size:9px;padding:2px 7px;border-radius:4px;white-space:nowrap;flex-shrink:0;margin-top:1px;font-weight:600;}
+.tag-free{background:rgba(72,207,173,.15);color:var(--accent2);}
+.tag-paid{background:rgba(255,107,107,.15);color:var(--danger);}
+.tag-book{background:rgba(247,151,30,.15);color:var(--accent3);}
+.tag-course{background:rgba(108,99,255,.15);color:var(--accent);}
+.skills-wrap{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;}
+.skill-pill{font-size:10px;padding:3px 9px;border-radius:100px;background:var(--border);color:var(--text2);}
+
+/* MILESTONE BANNERS */
+.milestone{display:flex;align-items:center;gap:12px;padding:12px 20px;font-size:13px;font-weight:600;}
+.milestone-intern{background:rgba(72,207,173,.08);border-left:3px solid var(--accent2);}
+.milestone-port{background:rgba(247,151,30,.08);border-left:3px solid var(--accent3);}
+.milestone-job{background:rgba(255,107,107,.08);border-left:3px solid var(--danger);}
+.milestone-sub{font-size:11px;font-weight:400;color:var(--text2);margin-top:2px;}
+.milestone-icon{font-size:20px;}
+
+/* PROJECT ASSIGNMENT CARDS */
+.proj-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px 22px;margin-bottom:14px;transition:border-color .2s;}
+.proj-card.submitted{border-color:var(--success);background:rgba(72,207,173,.04);}
+.proj-header{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.proj-badge{font-size:10px;font-weight:700;padding:4px 10px;border-radius:100px;font-family:monospace;}
+.proj-title{font-size:14px;font-weight:600;flex:1;}
+.proj-status{font-size:11px;padding:3px 10px;border-radius:100px;background:var(--border);color:var(--text2);}
+.proj-status.done{background:rgba(72,207,173,.2);color:var(--success);}
+.proj-desc{font-size:13px;color:var(--text2);margin-bottom:12px;}
+.req-list{list-style:none;margin-bottom:14px;}
+.req-list li{font-size:12px;color:var(--text2);padding:3px 0;padding-left:16px;position:relative;}
+.req-list li::before{content:'→';position:absolute;left:0;color:var(--text2);}
+.proj-submit{display:flex;gap:8px;align-items:center;}
+.proj-input{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-size:12px;font-family:inherit;outline:none;transition:border-color .2s;}
+.proj-input:focus{border-color:var(--accent);}
+.proj-input::placeholder{color:var(--text2);}
+.btn-submit{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .2s;white-space:nowrap;}
+.btn-submit:hover{opacity:.85;}
+.btn-submit.done{background:var(--success);}
+
+/* RESOURCE LINKS */
+.link-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+.link-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;transition:border-color .2s;}
+.link-card:hover{border-color:var(--accent2);}
+.link-card-top{display:flex;align-items:center;gap:8px;margin-bottom:5px;}
+.link-icon{font-size:18px;}
+.link-name{font-size:13px;font-weight:600;}
+.link-badge{font-size:9px;padding:2px 7px;border-radius:100px;margin-left:auto;}
+.link-badge.free{background:rgba(72,207,173,.15);color:var(--accent2);}
+.link-badge.paid{background:rgba(255,107,107,.15);color:var(--danger);}
+.link-desc{font-size:11px;color:var(--text2);}
+
+/* SALARY TABLE */
+.salary-table{width:100%;border-collapse:collapse;}
+.salary-table th{text-align:left;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--text2);padding:8px 12px;border-bottom:1px solid var(--border);}
+.salary-table td{padding:10px 12px;font-size:13px;border-bottom:1px solid var(--border);}
+.salary-table tr:last-child td{border-bottom:none;}
+.salary-highlight{color:var(--success);font-weight:600;}
+
+/* LOG */
+.log-input-wrap{display:flex;gap:8px;margin-bottom:16px;}
+.log-textarea{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-size:13px;font-family:inherit;resize:none;height:60px;outline:none;}
+.log-textarea:focus{border-color:var(--accent);}
+.btn-log{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:0 18px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;}
+.log-item{padding:10px 14px;border-radius:8px;background:var(--surface2);margin-bottom:6px;}
+.log-date{font-size:10px;color:var(--text2);margin-bottom:3px;font-family:monospace;}
+.log-text{font-size:13px;}
+.log-empty{color:var(--text2);font-size:13px;text-align:center;padding:40px;}
+
+/* RESET BTN */
+.btn-reset{background:transparent;border:1px solid var(--border);border-radius:8px;padding:6px 14px;color:var(--text2);font-size:12px;cursor:pointer;font-family:inherit;}
+.btn-reset:hover{border-color:var(--danger);color:var(--danger);}
+
+/* STREAK */
+.streak-card{display:flex;align-items:center;gap:16px;background:var(--surface2);border-radius:10px;padding:14px 18px;margin-bottom:16px;}
+.streak-num{font-size:32px;font-weight:700;color:var(--accent3);}
+.streak-text{font-size:13px;color:var(--text2);}
+
+/* SECTION DIVIDER */
+.section-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--text2);margin-bottom:12px;margin-top:8px;}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .app{grid-template-columns:1fr;}
+  .sidebar{display:none;}
+  .stats-grid{grid-template-columns:repeat(2,1fr);}
+  .link-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-title">DST Roadmap</div>
+    <div class="logo-sub">ICT Mahidol → FinTech / ธนาคาร</div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">หน้าหลัก</div>
+    <div class="nav-item active" onclick="showPage('pg-dashboard')">
+      <span class="nav-icon">🏠</span> Dashboard
+    </div>
+    <div class="nav-item" onclick="showPage('pg-today')">
+      <span class="nav-icon">✅</span> วันนี้ทำอะไร
+    </div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">เรียนรู้</div>
+    <div class="nav-item" onclick="showPage('pg-roadmap')">
+      <span class="nav-icon">🗺</span> Roadmap 4 ปี
+    </div>
+    <div class="nav-item" onclick="showPage('pg-resources')">
+      <span class="nav-icon">🔗</span> แหล่งเรียนฟรี
+    </div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">โปรเจ็ค</div>
+    <div class="nav-item" onclick="showPage('pg-projects')">
+      <span class="nav-icon">📋</span> Project Assignments
+    </div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">ก้าวหน้า</div>
+    <div class="nav-item" onclick="showPage('pg-career')">
+      <span class="nav-icon">💰</span> Career & Salary
+    </div>
+    <div class="nav-item" onclick="showPage('pg-log')">
+      <span class="nav-icon">📝</span> Activity Log
+    </div>
+  </div>
+
+  <div class="sidebar-bottom">
+    <div class="year-pills" id="sidebar-years">
+      <div class="year-pill">
+        <span class="pill-dot" style="background:var(--y1)"></span>
+        <span style="font-size:11px;min-width:38px;">ปี 1</span>
+        <div class="pill-bar"><div class="pill-fill" id="pill-y1" style="background:var(--y1);width:0%"></div></div>
+        <span class="pill-pct" id="pct-y1">0%</span>
+      </div>
+      <div class="year-pill">
+        <span class="pill-dot" style="background:var(--y2)"></span>
+        <span style="font-size:11px;min-width:38px;">ปี 2</span>
+        <div class="pill-bar"><div class="pill-fill" id="pill-y2" style="background:var(--y2);width:0%"></div></div>
+        <span class="pill-pct" id="pct-y2">0%</span>
+      </div>
+      <div class="year-pill">
+        <span class="pill-dot" style="background:var(--y3)"></span>
+        <span style="font-size:11px;min-width:38px;">ปี 3</span>
+        <div class="pill-bar"><div class="pill-fill" id="pill-y3" style="background:var(--y3);width:0%"></div></div>
+        <span class="pill-pct" id="pct-y3">0%</span>
+      </div>
+      <div class="year-pill">
+        <span class="pill-dot" style="background:var(--y4)"></span>
+        <span style="font-size:11px;min-width:38px;">ปี 4</span>
+        <div class="pill-bar"><div class="pill-fill" id="pill-y4" style="background:var(--y4);width:0%"></div></div>
+        <span class="pill-pct" id="pct-y4">0%</span>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+<!-- ========== PAGE: DASHBOARD ========== -->
+<div class="page active" id="pg-dashboard">
+  <div class="page-header">
+    <div class="page-title" id="dash-greeting">สวัสดี 👋</div>
+    <div class="page-sub" id="dash-date"></div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <span class="stat-num" id="stat-pct">0%</span>
+      <div class="stat-label">วิชาเสร็จแล้ว</div>
+    </div>
+    <div class="stat-card">
+      <span class="stat-num" id="stat-proj">0/8</span>
+      <div class="stat-label">Projects ส่งแล้ว</div>
+    </div>
+    <div class="stat-card">
+      <span class="stat-num" id="stat-days">0</span>
+      <div class="stat-label">วันที่เรียน</div>
+    </div>
+    <div class="stat-card">
+      <span class="stat-num" id="stat-streak">0 🔥</span>
+      <div class="stat-label">Streak (วัน)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">ความคืบหน้าแต่ละปี</div>
+    <div class="phase-progress">
+      <div class="phase-progress-top">
+        <span class="phase-name" style="color:var(--y1)">● ปี 1 — Foundation</span>
+        <span class="phase-pct" id="dash-p1">0/6</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="fill-y1" style="background:var(--y1);width:0%"></div></div>
+    </div>
+    <div class="phase-progress" style="margin-top:10px">
+      <div class="phase-progress-top">
+        <span class="phase-name" style="color:var(--y2)">● ปี 2 — Build Skills</span>
+        <span class="phase-pct" id="dash-p2">0/6</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="fill-y2" style="background:var(--y2);width:0%"></div></div>
+    </div>
+    <div class="phase-progress" style="margin-top:10px">
+      <div class="phase-progress-top">
+        <span class="phase-name" style="color:var(--y3)">● ปี 3 — Specialize</span>
+        <span class="phase-pct" id="dash-p3">0/6</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="fill-y3" style="background:var(--y3);width:0%"></div></div>
+    </div>
+    <div class="phase-progress" style="margin-top:10px">
+      <div class="phase-progress-top">
+        <span class="phase-name" style="color:var(--y4)">● ปี 4 — Launch</span>
+        <span class="phase-pct" id="dash-p4">0/5</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="fill-y4" style="background:var(--y4);width:0%"></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">เป้าหมายเงินเดือน — Data/FinTech ไทย</div>
+    <table class="salary-table">
+      <tr><th>ตำแหน่ง</th><th>ประสบการณ์</th><th>เงินเดือน (฿/เดือน)</th></tr>
+      <tr><td>Junior Data Analyst</td><td>0–2 ปี</td><td class="salary-highlight">30,000–45,000</td></tr>
+      <tr><td>Data Analyst / BI Analyst</td><td>2–4 ปี</td><td class="salary-highlight">45,000–70,000</td></tr>
+      <tr><td>Senior Data Analyst</td><td>4–7 ปี</td><td class="salary-highlight">70,000–100,000</td></tr>
+      <tr><td>Analytics Manager / Lead</td><td>7+ ปี</td><td class="salary-highlight">100,000–160,000</td></tr>
+      <tr><td>FinTech (KBTG / SCB Tech)</td><td>—</td><td class="salary-highlight">+15–30% กว่าธนาคารทั่วไป</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ========== PAGE: TODAY ========== -->
+<div class="page" id="pg-today">
+  <div class="page-header">
+    <div class="page-title">วันนี้ทำอะไร ✅</div>
+    <div class="page-sub" id="today-date"></div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div class="card-title" style="margin-bottom:0">Progress วันนี้</div>
+      <span id="today-count" style="font-size:13px;color:var(--text2)">0/9</span>
+    </div>
+    <div class="daily-progress-bar"><div class="daily-fill" id="daily-fill" style="width:0%"></div></div>
+  </div>
+
+  <div id="daily-list"></div>
+
+  <div style="margin-top:16px;display:flex;gap:8px">
+    <button class="btn-reset" onclick="resetDaily()">🔄 Reset วันใหม่</button>
+  </div>
+</div>
+
+<!-- ========== PAGE: ROADMAP ========== -->
+<div class="page" id="pg-roadmap">
+  <div class="page-header">
+    <div class="page-title">Roadmap 4 ปี 🗺</div>
+    <div class="page-sub">DST มหิดล → Data Science → FinTech / ธนาคาร</div>
+  </div>
+
+  <!-- YEAR 1 -->
+  <div class="phase-card" id="phase-y1">
+    <div class="phase-header" onclick="togglePhase('phase-y1')">
+      <span class="phase-dot" style="background:var(--y1)"></span>
+      <span class="phase-label" style="background:rgba(108,99,255,.15);color:var(--y1)">ปี 1 · 2567</span>
+      <span class="phase-header-title">Foundation — สร้างรากฐาน</span>
+      <span class="phase-count" id="cnt-y1">0/6</span>
+      <span class="phase-arrow">▼</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="course-card" data-year="y1" data-id="y1-1">
+        <div class="course-row" onclick="toggleCourse(this)">
+          <div class="course-cb" id="cb-y1-1" onclick="toggleCheck(event,'y1-1')"></div>
+          <div class="course-info">
+            <div class="course-top"><span class="course-code">ITDS 121</span><span class="course-name">Introduction to Programming</span></div>
+            <div class="course-desc">เรียน Python / เขียนโปรแกรมเบื้องต้น — ฐานของทุกอย่างในสาย Data</div>
+          </div>
+          <span class="course-expand-icon">▼</span>
+        </div>
+        <div class="course-body">
+          <div class="res-title">แหล่งเรียนรู้เพิ่มเติม</div>
+          <div class="res-item"><span class="res-tag tag-free">FREE</span><span>CS50P — <a href="https://cs50.harvard.edu/python" target="_blank">cs50.harvard.edu/python</a> — Python ที่ดีที่สุดในโลก (Harvard)</span></div>
+          <div class="res-item"><span class="res-tag tag-free">FREE</span><span>Automate the Boring Stuff — <a href="https://automatetheboringstuff.com" target="_blank">automatetheboringstuff.com</a></span></div>
+          <div class="res-item"><span class="res-tag tag-course">PLATFORM</span><span>Kaggle Learn: Intro to Python — ฝึกผ่าน Notebook ได้เลย</span></div>
+          <div class="res-title">Skills ที่ได้</div>
+          <div class="skills-wrap"><span class="skill-pill">Python</span><span class="skill-pill">Logic</span><span class="skill-pill">Functions</span><span class="skill-pill">OOP เบื้องต้น</span></div>
+        </div>
+      </div>
+
+      <div class="course-card" data-year="y1" data-id="y1-2">
+        <div class="course-row" onclick="toggleCourse(this)">
+          <div class="course-cb" id="cb-y1-2" onclick="toggleCheck(event,'y1-2')"></div>
+          <div class="course-info">
+            <div class="course-top"><span class="course-code">ITDS 124</span><span class="course-name">Calculus and Linear Algebra</span></div>
+            <div class="course-desc">คณิตศาสตร์สำหรับ Data Science — Matrix, Derivative, Probability</div>
+          </div>
+          <span class="course-expand-icon">▼</span>
+        </div>
+        <div class="course-body">
+          <div class="res-title">แหล่งเรียนรู้เพิ่มเติม</div>
+          <div class="res-item"><span class="res-tag tag-free">FREE</span><span>3Blue1Brown — Linear Algebra Series (YouTube) — เข้าใจง่าย ภาพสวย</span></div>
+          <div class="res-item"><span class="res-tag tag-free">FREE</span><span>Khan Academy: Multivariable Calculus — <a href="https://khanacademy.org" target="_blank">khanacademy.org</a></span></div>
+          <div class="res-item"><span class="res-tag tag-book">BOOK</span><span>Mathematics for Machine Learning — <a href="https://mml-book.github.io" target="_blank">mml-book.github.io</a> (ฟรี PDF)</span></div>
+          <div class="res-title">Skills ที่ได้</div>
+          <div class="skills-wrap"><span class="skill-pill">Linear Algebra</span><span class="skill-pill">Calculus</span><span class="skill-pill">Matrix Operations</span></div>
+        </div>
+      </div>
+
+      <div class="course-card" data-year="y1" data-id="y1-3">
+        <div class="course-row" onclick="toggleCourse(this)">
+          <div class="course-cb" id="cb-y1-3" onclick="toggleCheck(event,'y1-3')"></div>
+          <div class="course-info">
+            <div class="course-top"><span class="course-code">ITDS 125</span><span class="course-name">Probability and Statistics</span></div>
+            <div class="course-desc">สถิติ + Probability — หัวใจของ Data Analysis และ Finance</div>
+          </div>
+          <span class="course-expand-icon">▼</span>
+        </div>
+        <div class="course-body">
+          <div class="res-title">แหล่งเรียนรู้เพิ่มเติม</div>
+          <div class="res-item"><span class="res-tag tag-free">FREE</span><span>StatQuest with Josh Starmer (YouTube) — อธิบาย Stats ได้ดีที่สุดในโลก</span></div>
+          <div class="res-item"><span class="res-tag tag-course">COURSERA</span><span>Statistics with Python Specialization (Michigan) — ลอง Audit ฟรี</span></div>
+          <div class="res-item"><span class="res-tag tag-book">TEXTBOOK</span><span>Beaver &amp; Mendenhall — ทำโจทย์ทุก Exercise</span></div>
+          <div class="res-title">Skills ที่ได้</div>
+          <div class="skills-wrap"><span class="skill-pill">Hypothesis Testing</span><span class="skill-pill">Regression</span><span class="skill-pill">Probability Distributions</span></div>
+        </div>
+      </div>
+
+      <div class="course-card" data-year="y1" data-id="y1-4">
+        <div class="course-row" onclick="toggleCourse(this)">
+          <div class="course-cb" id="cb-y1-4" onclick="toggleCheck(event,'y1-4')"></div>
+          <div class="course-info">
+            <div class="course-top"><span class="course-code">ITDS 221</span><span class="course-name">Database Systems</span></div>
+            <div class="course-desc">SQL + Database Design — ทักษะที่ทุก Data Job ต้องการ</div>
+          </div>
+          <span class="course-expand-icon">▼</span>
+        </div>
+        <div class="course-body">
+          <div class="res-title">แหล่งเรียนรู้เพิ่มเติม</div>
+          <div class="res-item"><span class="res-tag tag-free">FREE</span><span>SQLZoo — <a href="https://sqlzoo.net" target="_blank">sqlzoo.net</a> — ฝึก SQL Interactive</span></div>
+          <div class="res-item"><span class="res-tag tag-free">FREE</span><span>Mode SQL Tutorial — <a href="https://mode.com/sql-tutorial" target="_blank">mode.com/sql-tutorial</a></span></div>
+          <div class="res-item"><span class="res-tag tag-free">FREE</span><span>LeetCode SQL 50 — ฝึก SQL สำหรับ Interview</span></div>
+          <div class="res-title">Skills ที่ได้</div>
+          <div class="skills-wrap"><span class="skill-pill">SQL</span><span class="skill-pill">Database Design</span><span class="skill-pill">Query Optimization</span></div>
+        </div>
+      </div>
+
+      <div class="course-card" data-year="y1" data-id="y1-5">
+        <div class="course-row" onclick="toggleCourse(this)">
+          <div class="course-cb" id="cb-y1-5" onclick="toggleCheck(event,'y1-5')"></div>
+          <div class="course-info">
+            <div class="course-top"><span class="course-code">ITDS 251</span><span class="course-name">Data Science Tools and Technologies</span></div>
+            <div class="course-desc">Pandas, NumPy, Jupyter — Prerequisite ของวิชา Data Science ทุกตัว</div>
+          </div>
+          <span class="course-expand-icon">▼</span>
+        </div>
+        <div class="course-body">
+          <div class="res-title">แหล่งเรียนรู้เพิ่มเติม</div>
+          <div class="res-item"><span class="res-tag tag-free">FREE</span><span>Kaggle: Pandas Course — สั้น 5 วัน ครบมาก</span></div>
+          <div class="res-item"><span class="res-tag tag-free">FREE</span><span>Google Colab — ฝึกเขียน Python Data Analysis ออนไลน์ฟรี</span></div>
+          <div class="res-item"><span class="res-tag tag-book">BOOK</span><span>Python for Data Analysis (Wes McKinney) — Bible ของ Pandas</span></div>
+          <div class="res-title">Skills ที่ได้</div>
+          <div class="skills-wrap"><span class="skill-pill">Pandas</span><span class="skill-pill">NumPy</span><span class="skill-pill">Matplotlib</span><span class="skill-pill">Jupyter</span></div>
+        </div>
+      </div>
+
+      <div class="course-card" data-year="y1" data-id="y1-extra">
+        <div class="course-row" onclick="toggleCourse(this)">
+          <div class="course-cb" id="cb-y1-extra" onclick="toggleCheck(event,'y1-extra')"></div>
+          <div class="course-info">
+            <div class="course-top"><span class="course-extra-badge">⭐ เพิ่มเอง</span><span class="course-name">Financial Markets — Yale (Robert Shiller)</span></div>
+            <div class="course-desc">Finance พื้นฐานสำหรับนักข้อมูล — ธนาคาร, หุ้น, Risk, FinTech</div>
+          </div>
+          <span class="course-expand-icon">▼</span>
+        </div>
+        <div class="course-body">
+          <div class="res-title">แหล่งเรียนรู้</div>
+          <div class="res-item"><span class="res-tag tag-free">FREE</span><span>Coursera: Financial Markets — Yale — <a href="https://coursera.org/learn/financial-markets-global" target="_blank">Audit ฟรีได้เลย</a></span></div>
+          <div class="res-item"><span class="res-tag tag-free">FREE</span><span>YouTube: The Plain Bagel — Finance อธิบายง่าย</span></div>
+          <div class="res-item"><span class="res-tag tag-free">FREE</span><span>Investopedia — <a href="https://investopedia.com" target="_blank">investopedia.com</a></span></div>
+          <div class="res-title">ทำไมต้องเรียน?</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:4px">ธนาคารต้องการ Data Analyst ที่ "เข้าใจธุรกิจ" Finance Knowledge คือ Differentiator ในการสัมภาษณ์</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- YEAR 2 -->
+  <div class="phase-card" id="phase-y2">
+    <div class="phase-header" onclick="togglePhase('phase-y2')">
+      <span class="phase-dot" style="background:var(--y2)"></span>
+      <span class="phase-label" style="background:rgba(72,207,173,.15);color:var(--y2)">ปี 2 · 2568</span>
+      <span class="phase-header-title">Build Skills — เริ่มสร้าง Portfolio</span>
+      <span class="phase-count" id="cnt-y2">0/6</span>
+      <span class="phase-arrow">▼</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="course-card" data-year="y2" data-id="y2-1">
+        <div class="course-row" onclick="toggleCourse(this)">
+          <div class="course-cb" id="cb-y2-1" onclick="toggleCheck(event,'y2-1')"></div>
+          <div class="course-info">
+            <div class="course-top"><span class="course-code">ITDS 341</span><span class="course-name">Introduction to Data Science</span></div>
+            <div class="course-desc">Data Mining, Business Intelligence, Cloud Computing เบื้องต้น</div>
+          </div>
+          <span class="course-expand-icon">▼</span>
+        </div>
+        <div class="course-body">
+          <div class="res-title">แหล่งเรียนรู้เพิ่มเติม</div>
+          <div class="res-item"><span class="res-tag tag-free">FREE</span><span>Kaggle: Data Science Path — เรียนควบคู่ได้เลย</span></div>
+          <div class="res-item"><span class="res-tag tag-course">COURSERA</span><span>IBM Data Science Professional Certificate — เน้น Hands-on</span></div>
+          <div class="res-item"><span class="res-tag tag-book">BOOK</span><span>Data Science from Scratch (Joel Grus) — สร้าง Algorithm เองตั้งแต่ต้น</span></div>
+          <div class="res-title">Skills ที่ได้</div>
+          <div class="skills-wrap"><span class="skill-pill">Data Pipeline</span><span class="skill-pill">EDA</span><span class="skill-pill">Data Cleaning</span></div>
+        </div>
+      </div>
+
+      <div class="course-card" data-year="y2" data-id="y2-2">
+        <div class="course-row" onclick="toggleCourse(this)">
+          <div class="course-cb" id="cb-y2-2" onclick="toggleCheck(event,'y2-2')"></div>
+          <div class="course-info">
+            <div class="course-top"><span class="course-code">ITDS 342</span><span class="course-name">Advanced Math &amp; Statistics for Data Science</span></div>
+            <div class="course-desc">Hypothesis Testing, Regression, Classification, Clustering</div>
+          </div>
+          <span class="course-expand-icon">▼</span>
+        </div>
+        <div class="course-body">
+          <div class="res-title">แหล่งเรียนรู้เพิ่มเติม</div>
+          <div class="res-item"><span class="res-tag tag-free">FREE</span><span>StatQuest — ANOVA, Regression, PCA (YouTube)</span></div>
+          <div class="res-item"><span class="res-tag tag-free">FREE</span><span>Think Stats (Allen Downey) — <a href="https://greenteapress.com/thinkstats2" target="_blank">ฟรี PDF</a></span></div>
+          <div class="res-item"><span class="res-tag tag-course">COURSERA</span><span>Statistics for Data Science (Duke) — Audit ฟรี</span></div>
+          <div class="res-title">Skills ที่ได้</div>
+          <div class="skills-wrap"><span class="skill-pill">Regression Analysis</span><span class="skill-pill">Hypothesis Testing</span><span class="skill-pill">A/B Testing</span></div>
+        </div>
+      </div>
+
+      <div class="course-card" data-year="y2" data-id="y2-3">
+        <div class="course-row" onclick="toggleCourse(this)">
+          <div class="course-cb" id="cb-y2-3" onclick="toggleCheck(event,'y2-3')"></div>
+          <div class="course-info">
+            <div class="course-top"><span class="course-code">ITDS 343</span><span class="course-name">Business Data Analytics ⭐</span></div>
+            <div class="course-desc">Tableau · Power BI · Dashboard · Data Storytelling — สำคัญมากสำหรับเป้าหมายของเธอ</div>
+          </div>
+          <span class="course-expand-icon">▼</span>
+        </div>
+        <div class="course-body">
+          <div class="res-title">แหล่งเรียนรู้เพิ่มเติม</div>
+          <div class="res-item"><span class="res-tag tag-free">FREE</span><span>Tableau Public — <a href="https://public.tableau.com" target="_blank">public.tableau.com</a></span></div>
+          <div class="res-item"><span class="res-tag tag-free">FREE</span><span>Microsoft Power BI Desktop — ดาวน์โหลดฟรี + YouTube Tutorial</span></div>
+          <div class="res-item"><span class="res-tag tag-course">COURSERA</span><span>Business Analytics Specialization (Wharton, UPenn)</span></div>
+          <div class="res-title">Skills ที่ได้</div>
+          <div class="skills-wrap"><span class="skill-pill">Tableau</span><span class="skill-pill">Power BI</span><span class="skill-pill">Dashboard Design</span><span class="skill-pill">Data Storytelling</span></div>
+        </div>
+      </div>
+
+      <div class="course-card" data-year="y2" data-id="y2-4">
+        <div class="course-row" onclick="toggleCourse(this)">
+          <div class="course-cb" id="cb-y2-4" onclick="toggleCheck(event,'y2-4')"></div>
+          <div class="course-info">
+            <div class="course-top"><span class="course-code">ITDS 345</span><span class="course-name">Business Intelligence ⭐</span></div>
+            <div class="course-desc">KPI Design · Data Warehouse · Decision Support — ตรงกับงาน BI ในธนาคาร</div>
+          </div>
+          <span class="course-expand-icon">▼</span>
+        </div>
+        <div class="course-body">
+          <div class="res-title">แหล่งเรียนรู้เพิ่มเติม</div>
+          <div class="res-item"><span class="res-tag tag-free">FREE</span><span>Google Looker Studio — ทดลองสร้าง Dashboard เชื่อมข้อมูลจริง</span></div>
+          <div class="res-item"><span class="res-tag tag-course">COURSERA</span><span>Business Intelligence &amp; Data Warehousing (UC Davis)</span></div>
+          <div class="res-item"><span class="res-tag tag-book">BOOK</span><span>The Data Warehouse Toolkit (Kimball) — Classic ของ DWH Design</span></div>
+          <div class="res-title">Skills ที่ได้</div>
+          <div class="skills-wrap"><span class="skill-pill">KPI Design</span><span class="skill-pill">ETL</span><span class="skill-pill">Data Warehouse</span><span class="skill-pill">Looker</span></div>
+        </div>
+      </div>
+
+      <div class="milestone milestone-intern">
+        <span class="milestone-icon">🏦</span>
+        <div>
+          <div>ฝึกงาน Short-term (เทอม 3 ปี 2) — เป้าหมาย: KBTG · SCB Tech · Kasikorn X · TTB Analytics</div>
+          <div class="milestone-sub">เริ่มสมัครต้นปี 2 เทอม 2 — เตรียม Resume + Portfolio ก่อนสมัคร</div>
+        </div>
+      </div>
+
+      <div class="course-card" data-year="y2" data-id="y2-extra">
+        <div class="course-row" onclick="toggleCourse(this)">
+          <div class="course-cb" id="cb-y2-extra" onclick="toggleCheck(event,'y2-extra')"></div>
+          <div class="course-info">
+            <div class="course-top"><span class="course-extra-badge">⭐ เพิ่มเอง</span><span class="course-name">Excel + Financial Modeling เบื้องต้น</span></div>
+            <div class="course-desc">ธนาคารยังใช้ Excel เยอะมาก — P&amp;L, Balance Sheet, DCF Model</div>
+          </div>
+          <span class="course-expand-icon">▼</span>
+        </div>
+        <div class="course-body">
+          <div class="res-title">แหล่งเรียนรู้</div>
+          <div class="res-item"><span class="res-tag tag-free">FREE</span><span>CFI: Financial Modeling &amp; Valuation — <a href="https://corporatefinanceinstitute.com" target="_blank">corporatefinanceinstitute.com</a></span></div>
+          <div class="res-item"><span class="res-tag tag-free">FREE</span><span>Chandoo.org — Excel Tips สำหรับ Business Analytics</span></div>
+          <div class="res-item"><span class="res-tag tag-paid">PAID</span><span>Wall Street Prep: Excel Crash Course — คุ้มมากถ้าอยากสาย Finance</span></div>
+          <div class="res-title">Skills ที่ได้</div>
+          <div class="skills-wrap"><span class="skill-pill">Excel Advanced</span><span class="skill-pill">P&amp;L Analysis</span><span class="skill-pill">Financial Modeling</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- YEAR 3 -->
+  <div class="phase-card" id="phase-y3">
+    <div class="phase-header" onclick="togglePhase('phase-y3')">
+      <span class="phase-dot" style="background:var(--y3)"></span>
+      <span class="phase-label" style="background:rgba(247,151,30,.15);color:var(--y3)">ปี 3 · 2569</span>
+      <span class="phase-header-title">Specialize — เลือก FinTech Track</span>
+      <span class="phase-count" id="cnt-y3">0/6</span>
+      <span class="phase-arrow">▼</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="course-card" data-year="y3" data-id="y3-1">
+        <div class="course-row" onclick="toggleCourse(this)">
+          <div class="course-cb" id="cb-y3-1" onclick="toggleCheck(event,'y3-1')"></div>
+          <div class="course-info">
+            <div class="course-top"><span class="course-code">ITDS 344</span><span class="course-name">Data Engineering &amp; Infrastructure</span></div>
+            <div class="course-desc">Apache Spark · Big Data · Distributed Systems — ธนาคารมีข้อมูลมหาศาล</div>
+          </div>
+          <span class="course-expand-icon">▼</span>
+        </div>
+        <div class="course-body">
+          <div class="res-title">แหล่งเรียนรู้เพิ่มเติม</div>
+          <div class="res-item"><span class="res-tag tag-free">FREE</span><span>Databricks Academy — Free Spark/Lakehouse Training</span></div>
+          <div class="res-item"><span class="res-tag tag-course">COURSERA</span><span>Data Engineering with Google Cloud (Specialization)</span></div>
+          <div class="res-item"><span class="res-tag tag-free">FREE</span><span>DataTalksClub DE Zoomcamp — <a href="https://github.com/DataTalksClub/data-engineering-zoomcamp" target="_blank">GitHub</a> — ฟรี ครบมาก</span></div>
+          <div class="res-title">Skills ที่ได้</div>
+          <div class="skills-wrap"><span class="skill-pill">Apache Spark</span><span class="skill-pill">Airflow</span><span class="skill-pill">Data Lake</span><span class="skill-pill">ETL Pipeline</span></div>
+        </div>
+      </div>
+
+      <div class="course-card" data-year="y3" data-id="y3-2">
+        <div class="course-row" onclick="toggleCourse(this)">
+          <div class="course-cb" id="cb-y3-2" onclick="toggleCheck(event,'y3-2')"></div>
+          <div class="course-info">
+            <div class="course-top"><span class="course-code">ITDS 346</span><span class="course-name">Practical Data Science (Real Project)</span></div>
+            <div class="course-desc">โปรเจกต์จริงจากอุตสาหกรรม — พยายามเลือกโจทย์ที่เกี่ยวกับ Finance/Banking</div>
+          </div>
+          <span class="course-expand-icon">▼</span>
+        </div>
+        <div class="course-body">
+          <div class="res-title">แนวทาง Project ที่ควรทำ</div>
+          <div class="res-item"><span class="res-tag tag-free">KAGGLE</span><span>Credit Card Fraud Detection — Kaggle Classic ตรงสาย Banking</span></div>
+          <div class="res-item"><span class="res-tag tag-free">KAGGLE</span><span>Home Credit Default Risk — Loan Prediction สำหรับธนาคาร</span></div>
+          <div class="res-item"><span class="res-tag tag-free">KAGGLE</span><span>Santander Customer Satisfaction — Real Bank Data</span></div>
+          <div class="res-title">Skills ที่ได้</div>
+          <div class="skills-wrap"><span class="skill-pill">End-to-end ML</span><span class="skill-pill">Model Deployment</span><span class="skill-pill">Project Report</span></div>
+        </div>
+      </div>
+
+      <div class="milestone milestone-port">
+        <span class="milestone-icon">🗂️</span>
+        <div>
+          <div>สร้าง GitHub Portfolio — อัปโหลด 3 Projects ที่เกี่ยวกับ Finance/Banking</div>
+          <div class="milestone-sub">ทำให้ README สวยงาม · มี Dashboard · มี Business Insight อธิบายผลลัพธ์</div>
+        </div>
+      </div>
+
+      <div class="course-card" data-year="y3" data-id="y3-extra1">
+        <div class="course-row" onclick="toggleCourse(this)">
+          <div class="course-cb" id="cb-y3-extra1" onclick="toggleCheck(event,'y3-extra1')"></div>
+          <div class="course-info">
+            <div class="course-top"><span class="course-extra-badge">⭐ เพิ่มเอง</span><span class="course-name">Credit Risk Modeling &amp; Fraud Detection</span></div>
+            <div class="course-desc">สิ่งที่ธนาคารถามใน Interview — Scorecard, Logistic Regression, XGBoost</span></div>
+          </div>
+          <span class="course-expand-icon">▼</span>
+        </div>
+        <div class="course-body">
+          <div class="res-title">แหล่งเรียนรู้</div>
+          <div class="res-item"><span class="res-tag tag-course">COURSERA</span><span>Credit Risk Modeling in Python (365 Data Science)</span></div>
+          <div class="res-item"><span class="res-tag tag-free">FREE</span><span>Kaggle: Credit Fraud Notebook Tutorials</span></div>
+          <div class="res-item"><span class="res-tag tag-book">BOOK</span><span>Credit Risk Analytics (Baesens) — Standard Reference</span></div>
+          <div class="res-title">Skills ที่ได้</div>
+          <div class="skills-wrap"><span class="skill-pill">Credit Scoring</span><span class="skill-pill">Fraud Detection</span><span class="skill-pill">Scikit-learn</span><span class="skill-pill">XGBoost</span></div>
+        </div>
+      </div>
+
+      <div class="course-card" data-year="y3" data-id="y3-extra2">
+        <div class="course-row" onclick="toggleCourse(this)">
+          <div class="course-cb" id="cb-y3-extra2" onclick="toggleCheck(event,'y3-extra2')"></div>
+          <div class="course-info">
+            <div class="course-top"><span class="course-extra-badge">⭐ เพิ่มเอง</span><span class="course-name">Google Data Analytics Certificate</span></div>
+            <div class="course-desc">Certificate ที่ HR ธนาคาร/FinTech รู้จักดี เพิ่ม Resume ได้ชัดเจน</div>
+          </div>
+          <span class="course-expand-icon">▼</span>
+        </div>
+        <div class="course-body">
+          <div class="res-title">แหล่งเรียนรู้</div>
+          <div class="res-item"><span class="res-tag tag-paid">COURSERA</span><span>Google Data Analytics Certificate — ~6 เดือน, สมัคร Financial Aid ฟรีได้</span></div>
+          <div class="res-item"><span class="res-tag tag-free">FREE</span><span>หลังจบได้ Badge ใส่ LinkedIn — เพิ่ม Visibility ใน Job Search</span></div>
+          <div class="res-title">Skills ที่ได้</div>
+          <div class="skills-wrap"><span class="skill-pill">R / SQL / Tableau</span><span class="skill-pill">Data-driven Decision</span><span class="skill-pill">Google Certificate</span></div>
+        </div>
+      </div>
+
+      <div class="course-card" data-year="y3" data-id="y3-extra3">
+        <div class="course-row" onclick="toggleCourse(this)">
+          <div class="course-cb" id="cb-y3-extra3" onclick="toggleCheck(event,'y3-extra3')"></div>
+          <div class="course-info">
+            <div class="course-top"><span class="course-extra-badge">⭐ เพิ่มเอง</span><span class="course-name">LinkedIn + Resume สาย Data/FinTech</span></div>
+            <div class="course-desc">ปรับ LinkedIn ให้ขึ้น Open to Work + เขียน Summary ดึงดูด Recruiter ธนาคาร</div>
+          </div>
+          <span class="course-expand-icon">▼</span>
+        </div>
+        <div class="course-body">
+          <div class="res-title">Tips</div>
+          <div class="res-item"><span class="res-tag tag-free">TIP</span><span>Headline: "Data Science Student @ Mahidol | FinTech &amp; Banking Analytics"</span></div>
+          <div class="res-item"><span class="res-tag tag-free">TIP</span><span>ใส่ทุก Project ใน Featured Section พร้อม Screenshot Dashboard</span></div>
+          <div class="res-item"><span class="res-tag tag-free">TIP</span><span>Follow: KBTG, Kasikorn X, SCB Tech, Bank of Thailand บน LinkedIn</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- YEAR 4 -->
+  <div class="phase-card" id="phase-y4">
+    <div class="phase-header" onclick="togglePhase('phase-y4')">
+      <span class="phase-dot" style="background:var(--y4)"></span>
+      <span class="phase-label" style="background:rgba(255,107,107,.15);color:var(--y4)">ปี 4 · 2570</span>
+      <span class="phase-header-title">Launch — สหกิจ + Job Hunt</span>
+      <span class="phase-count" id="cnt-y4">0/5</span>
+      <span class="phase-arrow">▼</span>
+    </div>
+    <div class="phase-body">
+
+      <div class="course-card" data-year="y4" data-id="y4-1">
+        <div class="course-row" onclick="toggleCourse(this)">
+          <div class="course-cb" id="cb-y4-1" onclick="toggleCheck(event,'y4-1')"></div>
+          <div class="course-info">
+            <div class="course-top"><span class="course-code">สหกิจ</span><span class="course-name">สหกิจศึกษา 4 เดือน (เทอม 1 ปี 4)</span></div>
+            <div class="course-desc">เป้าหมาย: ธนาคาร / FinTech ที่มี Data Team — Key Milestone สำคัญที่สุด</div>
+          </div>
+          <span class="course-expand-icon">▼</span>
+        </div>
+        <div class="course-body">
+          <div class="res-title">บริษัทที่น่าสมัคร</div>
+          <div class="res-item"><span class="res-tag tag-free">TOP</span><span><strong>KBTG</strong> — Data-intensive, Culture ดี, Tech-first</span></div>
+          <div class="res-item"><span class="res-tag tag-free">TOP</span><span><strong>SCB Tech</strong> — Analytics ทุก BU, Remote-friendly</span></div>
+          <div class="res-item"><span class="res-tag tag-free">TOP</span><span><strong>Kasikorn X</strong> — FinTech Lab ของ KBANK, Startup Culture</span></div>
+          <div class="res-item"><span class="res-tag tag-course">FinTech</span><span>Lightnet, Ascend Money (TrueMoney), 2C2P</span></div>
+          <div class="res-item"><span class="res-tag tag-book">ธปท.</span><span>Bank of Thailand — Data Analytics ระดับชาติ</span></div>
+          <div class="res-title">เตรียมตัวอย่างไร</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:4px">เริ่มสมัครต้นปี 3 เทอม 2 · เตรียม Portfolio GitHub · ฝึก SQL Interview บน LeetCode</div>
+        </div>
+      </div>
+
+      <div class="course-card" data-year="y4" data-id="y4-2">
+        <div class="course-row" onclick="toggleCourse(this)">
+          <div class="course-cb" id="cb-y4-2" onclick="toggleCheck(event,'y4-2')"></div>
+          <div class="course-info">
+            <div class="course-top"><span class="course-code">Project</span><span class="course-name">Senior Project — เลือกโจทย์ FinTech</span></div>
+            <div class="course-desc">โอกาสทำ Research/Project ที่ใช้ใน Portfolio ได้เลย — อย่าทำ Generic Topic</div>
+          </div>
+          <span class="course-expand-icon">▼</span>
+        </div>
+        <div class="course-body">
+          <div class="res-title">หัวข้อที่แนะนำ</div>
+          <div class="res-item"><span class="res-tag tag-free">IDEA</span><span>Explainable AI สำหรับ Credit Scoring ในธนาคารไทย</span></div>
+          <div class="res-item"><span class="res-tag tag-free">IDEA</span><span>Real-time Fraud Detection Pipeline บน Apache Kafka + ML</span></div>
+          <div class="res-item"><span class="res-tag tag-free">IDEA</span><span>Customer Churn Prediction สำหรับ Digital Banking</span></div>
+          <div class="res-item"><span class="res-tag tag-free">IDEA</span><span>Financial Dashboard สำหรับ SME Loan Analysis</span></div>
+        </div>
+      </div>
+
+      <div class="milestone milestone-job">
+        <span class="milestone-icon">🎯</span>
+        <div>
+          <div>Target Roles หลังเรียนจบ — เงินเดือน 35,000–65,000 บาท/เดือน (ไทย)</div>
+          <div class="milestone-sub">Data Analyst · BI Developer ใน KBANK · SCB · TTB · ธปท. · FinTech</div>
+        </div>
+      </div>
+
+      <div class="course-card" data-year="y4" data-id="y4-extra1">
+        <div class="course-row" onclick="toggleCourse(this)">
+          <div class="course-cb" id="cb-y4-extra1" onclick="toggleCheck(event,'y4-extra1')"></div>
+          <div class="course-info">
+            <div class="course-top"><span class="course-extra-badge">⭐ เพิ่มเอง</span><span class="course-name">SQL Interview Prep สำหรับ Data Role</span></div>
+            <div class="course-desc">ธนาคารและ FinTech มักมี SQL Test ในรอบสัมภาษณ์</div>
+          </div>
+          <span class="course-expand-icon">▼</span>
+        </div>
+        <div class="course-body">
+          <div class="res-title">แหล่งฝึก</div>
+          <div class="res-item"><span class="res-tag tag-free">FREE</span><span>LeetCode SQL 50 — ครบ + มี Solution</span></div>
+          <div class="res-item"><span class="res-tag tag-free">FREE</span><span>StrataScratch — SQL + Python จาก Real Companies</span></div>
+          <div class="res-item"><span class="res-tag tag-free">FREE</span><span>DataLemur — SQL สำหรับ Data Analyst Interview</span></div>
+        </div>
+      </div>
+
+      <div class="course-card" data-year="y4" data-id="y4-extra2">
+        <div class="course-row" onclick="toggleCourse(this)">
+          <div class="course-cb" id="cb-y4-extra2" onclick="toggleCheck(event,'y4-extra2')"></div>
+          <div class="course-info">
+            <div class="course-top"><span class="course-extra-badge">⭐ ระยะยาว</span><span class="course-name">เป้าหมาย 3–5 ปีหลังเรียนจบ</span></div>
+            <div class="course-desc">Senior DA → Business Analyst → Finance Manager / Data Lead</div>
+          </div>
+          <span class="course-expand-icon">▼</span>
+        </div>
+        <div class="course-body">
+          <div class="res-title">Career Ladder</div>
+          <div class="res-item"><span class="res-tag tag-free">Y+1</span><span>Data Analyst (Junior) ที่ธนาคาร → เรียนรู้ Business Domain</span></div>
+          <div class="res-item"><span class="res-tag tag-free">Y+3</span><span>Senior Data Analyst / Business Analyst → เพิ่ม Finance Certification</span></div>
+          <div class="res-item"><span class="res-tag tag-free">Y+5</span><span>Analytics Manager / Finance Manager → Remote ใน Regional Bank หรือ MNC</span></div>
+          <div class="res-item"><span class="res-tag tag-course">REMOTE</span><span>FinTech ระดับ APAC: Wise, Grab Financial, Sea Money</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ========== PAGE: PROJECTS ========== -->
+<div class="page" id="pg-projects">
+  <div class="page-header">
+    <div class="page-title">Project Assignments 📋</div>
+    <div class="page-sub">โปรเจ็คที่ต้องทำส่งตอนจบแต่ละปี — ใส่ link GitHub หรือ Colab แล้วกด Submit</div>
+  </div>
+
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-title">Progress</div>
+    <div style="display:flex;align-items:center;gap:14px">
+      <div style="flex:1">
+        <div class="progress-track" style="height:8px"><div class="progress-fill" id="proj-fill" style="background:var(--success);width:0%"></div></div>
+      </div>
+      <span id="proj-count" style="font-size:13px;color:var(--text2);white-space:nowrap">0/8 projects submitted</span>
+    </div>
+  </div>
+
+  <div class="section-label" style="color:var(--y1)">● ปี 1 — Foundation Projects</div>
+
+  <div class="proj-card" id="proj-p1a">
+    <div class="proj-header">
+      <span class="proj-badge" style="background:rgba(108,99,255,.2);color:var(--y1)">P1-A</span>
+      <span class="proj-title">Budget Tracker CLI</span>
+      <span class="proj-status" id="st-p1a">ยังไม่ส่ง</span>
+    </div>
+    <div class="proj-desc">เขียน Python CLI program รับรายรับ/รายจ่าย คำนวณ summary รายเดือน แสดงผลในรูปแบบ table</div>
+    <ul class="req-list">
+      <li>รับ input: ประเภท, จำนวนเงิน, วันที่</li>
+      <li>คำนวณ: รายรับรวม, รายจ่ายรวม, คงเหลือ</li>
+      <li>แสดงผล summary เป็น table ใน terminal</li>
+      <li>บันทึกข้อมูลใน CSV หรือ JSON</li>
+    </ul>
+    <div class="proj-submit">
+      <input class="proj-input" id="in-p1a" type="text" placeholder="วาง GitHub URL หรือ Colab link ที่นี่...">
+      <button class="btn-submit" onclick="submitProject('p1a')">Submit ✓</button>
+    </div>
+  </div>
+
+  <div class="proj-card" id="proj-p1b">
+    <div class="proj-header">
+      <span class="proj-badge" style="background:rgba(108,99,255,.2);color:var(--y1)">P1-B</span>
+      <span class="proj-title">Loan Amortization Calculator</span>
+      <span class="proj-status" id="st-p1b">ยังไม่ส่ง</span>
+    </div>
+    <div class="proj-desc">คำนวณตาราง Amortization Schedule ของเงินกู้ด้วย Python แสดงให้เห็นว่าดอกเบี้ยลดลงอย่างไรในแต่ละงวด</div>
+    <ul class="req-list">
+      <li>รับ input: เงินกู้, อัตราดอกเบี้ย, จำนวนงวด</li>
+      <li>คำนวณ installment แต่ละงวด (ต้น + ดอก)</li>
+      <li>แสดง table ครบทุกงวดพร้อม balance คงเหลือ</li>
+      <li>Plot กราฟแสดง principal vs interest ด้วย matplotlib</li>
+    </ul>
+    <div class="proj-submit">
+      <input class="proj-input" id="in-p1b" type="text" placeholder="วาง GitHub URL หรือ Colab link ที่นี่...">
+      <button class="btn-submit" onclick="submitProject('p1b')">Submit ✓</button>
+    </div>
+  </div>
+
+  <div class="section-label" style="color:var(--y2);margin-top:20px">● ปี 2 — Data Analysis Projects</div>
+
+  <div class="proj-card" id="proj-p2a">
+    <div class="proj-header">
+      <span class="proj-badge" style="background:rgba(72,207,173,.2);color:var(--y2)">P2-A</span>
+      <span class="proj-title">Financial EDA + Visualization</span>
+      <span class="proj-status" id="st-p2a">ยังไม่ส่ง</span>
+    </div>
+    <div class="proj-desc">วิเคราะห์ financial dataset จาก Kaggle ด้วย pandas แล้ว visualize ให้เห็น insight ที่น่าสนใจ</div>
+    <ul class="req-list">
+      <li>เลือก dataset: Home Credit, Lending Club, หรือ Bank Marketing</li>
+      <li>ทำ data cleaning + EDA ครบถ้วน</li>
+      <li>สร้าง visualization อย่างน้อย 5 chart</li>
+      <li>เขียน README อธิบาย Business Insight ที่ค้นพบ</li>
+    </ul>
+    <div class="proj-submit">
+      <input class="proj-input" id="in-p2a" type="text" placeholder="วาง GitHub URL หรือ Colab link ที่นี่...">
+      <button class="btn-submit" onclick="submitProject('p2a')">Submit ✓</button>
+    </div>
+  </div>
+
+  <div class="proj-card" id="proj-p2b">
+    <div class="proj-header">
+      <span class="proj-badge" style="background:rgba(72,207,173,.2);color:var(--y2)">P2-B</span>
+      <span class="proj-title">BI Dashboard — Banking KPIs</span>
+      <span class="proj-status" id="st-p2b">ยังไม่ส่ง</span>
+    </div>
+    <div class="proj-desc">สร้าง Interactive Dashboard ด้วย Power BI, Tableau Public, หรือ Plotly Dash แสดง KPI สำหรับธนาคาร</div>
+    <ul class="req-list">
+      <li>แสดง KPI: total loans, default rate, revenue, customer segments</li>
+      <li>มี filter / slicer ให้ interactive ได้</li>
+      <li>Design สะอาด อ่านง่าย</li>
+      <li>ส่ง screenshot + Tableau Public link หรือ GitHub repo</li>
+    </ul>
+    <div class="proj-submit">
+      <input class="proj-input" id="in-p2b" type="text" placeholder="วาง Tableau Public URL หรือ GitHub link ที่นี่...">
+      <button class="btn-submit" onclick="submitProject('p2b')">Submit ✓</button>
+    </div>
+  </div>
+
+  <div class="section-label" style="color:var(--y3);margin-top:20px">● ปี 3 — ML + Portfolio Projects</div>
+
+  <div class="proj-card" id="proj-p3a">
+    <div class="proj-header">
+      <span class="proj-badge" style="background:rgba(247,151,30,.2);color:var(--y3)">P3-A</span>
+      <span class="proj-title">Credit Risk / Fraud Detection Model</span>
+      <span class="proj-status" id="st-p3a">ยังไม่ส่ง</span>
+    </div>
+    <div class="proj-desc">สร้าง ML model สำหรับ predict loan default หรือ detect fraud ด้วย scikit-learn / XGBoost</div>
+    <ul class="req-list">
+      <li>ใช้ dataset จาก Kaggle: Home Credit หรือ Credit Fraud</li>
+      <li>เปรียบเทียบ model อย่างน้อย 3 algorithms</li>
+      <li>วัดผลด้วย AUC-ROC, Precision, Recall</li>
+      <li>GitHub repo + README อธิบาย Business Impact</li>
+    </ul>
+    <div class="proj-submit">
+      <input class="proj-input" id="in-p3a" type="text" placeholder="วาง GitHub URL ที่นี่...">
+      <button class="btn-submit" onclick="submitProject('p3a')">Submit ✓</button>
+    </div>
+  </div>
+
+  <div class="proj-card" id="proj-p3b">
+    <div class="proj-header">
+      <span class="proj-badge" style="background:rgba(247,151,30,.2);color:var(--y3)">P3-B</span>
+      <span class="proj-title">GitHub Portfolio — 3 Finance Projects</span>
+      <span class="proj-status" id="st-p3b">ยังไม่ส่ง</span>
+    </div>
+    <div class="proj-desc">จัด GitHub Profile ให้ดูเป็น Professional Portfolio มี 3 Finance/Banking projects พร้อม README สมบูรณ์</div>
+    <ul class="req-list">
+      <li>GitHub Profile README แนะนำตัวพร้อม skills</li>
+      <li>3 Pinned repos: EDA, Dashboard, ML model</li>
+      <li>README แต่ละ repo: problem, approach, result, screenshot</li>
+      <li>ทุก notebook run ได้บน Colab</li>
+    </ul>
+    <div class="proj-submit">
+      <input class="proj-input" id="in-p3b" type="text" placeholder="วาง GitHub Profile URL ที่นี่...">
+      <button class="btn-submit" onclick="submitProject('p3b')">Submit ✓</button>
+    </div>
+  </div>
+
+  <div class="section-label" style="color:var(--y4);margin-top:20px">● ปี 4 — Capstone Projects</div>
+
+  <div class="proj-card" id="proj-p4a">
+    <div class="proj-header">
+      <span class="proj-badge" style="background:rgba(255,107,107,.2);color:var(--y4)">P4-A</span>
+      <span class="proj-title">Senior Project / Capstone FinTech</span>
+      <span class="proj-status" id="st-p4a">ยังไม่ส่ง</span>
+    </div>
+    <div class="proj-desc">Senior Project ที่เลือกหัวข้อ FinTech/Banking — นี่คือ showpiece สำคัญที่สุดในการสัมภาษณ์</div>
+    <ul class="req-list">
+      <li>หัวข้อต้องเกี่ยวข้องกับ Finance/Banking domain</li>
+      <li>มี Data Pipeline + Analysis + Result ครบ</li>
+      <li>เขียน Business Recommendation จากผลลัพธ์</li>
+      <li>ส่ง GitHub repo + Paper/Report PDF</li>
+    </ul>
+    <div class="proj-submit">
+      <input class="proj-input" id="in-p4a" type="text" placeholder="วาง GitHub URL หรือ Paper link ที่นี่...">
+      <button class="btn-submit" onclick="submitProject('p4a')">Submit ✓</button>
+    </div>
+  </div>
+
+  <div class="proj-card" id="proj-p4b">
+    <div class="proj-header">
+      <span class="proj-badge" style="background:rgba(255,107,107,.2);color:var(--y4)">P4-B</span>
+      <span class="proj-title">SQL Interview Ready — LeetCode SQL 50</span>
+      <span class="proj-status" id="st-p4b">ยังไม่ส่ง</span>
+    </div>
+    <div class="proj-desc">ผ่าน LeetCode SQL 50 ได้อย่างน้อย 40/50 ข้อ เพื่อเตรียม SQL Interview สำหรับธนาคาร/FinTech</div>
+    <ul class="req-list">
+      <li>ทำ LeetCode SQL 50 ครบทุกข้อ</li>
+      <li>ผ่านอย่างน้อย 40 ข้อ (80%)</li>
+      <li>ส่ง screenshot หน้า progress ของ LeetCode</li>
+    </ul>
+    <div class="proj-submit">
+      <input class="proj-input" id="in-p4b" type="text" placeholder="วาง LeetCode profile URL หรืออัปโหลด screenshot link ที่นี่...">
+      <button class="btn-submit" onclick="submitProject('p4b')">Submit ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== PAGE: RESOURCES ========== -->
+<div class="page" id="pg-resources">
+  <div class="page-header">
+    <div class="page-title">แหล่งเรียนฟรี 🔗</div>
+    <div class="page-sub">Resources คัดมาแล้ว สำหรับสาย Data Science → FinTech โดยเฉพาะ</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">SQL &amp; Database</div>
+    <div class="link-grid">
+      <div class="link-card"><div class="link-card-top"><span class="link-icon">🐘</span><span class="link-name">SQLZoo</span><span class="link-badge free">FREE</span></div><div class="link-desc">ฝึก SQL Interactive ทีละคำสั่ง — <a href="https://sqlzoo.net" target="_blank">sqlzoo.net</a></div></div>
+      <div class="link-card"><div class="link-card-top"><span class="link-icon">📊</span><span class="link-name">Mode SQL Tutorial</span><span class="link-badge free">FREE</span></div><div class="link-desc">SQL เน้น Business Analytics — <a href="https://mode.com/sql-tutorial" target="_blank">mode.com</a></div></div>
+      <div class="link-card"><div class="link-card-top"><span class="link-icon">💡</span><span class="link-name">LeetCode SQL 50</span><span class="link-badge free">FREE</span></div><div class="link-desc">SQL Interview Prep — <a href="https://leetcode.com/studyplan/top-sql-50/" target="_blank">leetcode.com</a></div></div>
+      <div class="link-card"><div class="link-card-top"><span class="link-icon">🍋</span><span class="link-name">DataLemur</span><span class="link-badge free">FREE</span></div><div class="link-desc">SQL สำหรับ Data Analyst Interview — <a href="https://datalemur.com" target="_blank">datalemur.com</a></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Python &amp; Data Science</div>
+    <div class="link-grid">
+      <div class="link-card"><div class="link-card-top"><span class="link-icon">🎓</span><span class="link-name">CS50P (Harvard)</span><span class="link-badge free">FREE</span></div><div class="link-desc">Python ที่ดีที่สุดในโลก — <a href="https://cs50.harvard.edu/python" target="_blank">cs50.harvard.edu</a></div></div>
+      <div class="link-card"><div class="link-card-top"><span class="link-icon">🐼</span><span class="link-name">Kaggle Learn</span><span class="link-badge free">FREE</span></div><div class="link-desc">Python, Pandas, ML — <a href="https://kaggle.com/learn" target="_blank">kaggle.com/learn</a></div></div>
+      <div class="link-card"><div class="link-card-top"><span class="link-icon">🐍</span><span class="link-name">Real Python</span><span class="link-badge free">FREE</span></div><div class="link-desc">บทความ Python อ่านง่าย — <a href="https://realpython.com" target="_blank">realpython.com</a></div></div>
+      <div class="link-card"><div class="link-card-top"><span class="link-icon">☁️</span><span class="link-name">Google Colab</span><span class="link-badge free">FREE</span></div><div class="link-desc">ทำ Notebook บน Cloud ฟรี — <a href="https://colab.research.google.com" target="_blank">colab.google</a></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Finance &amp; FinTech</div>
+    <div class="link-grid">
+      <div class="link-card"><div class="link-card-top"><span class="link-icon">📈</span><span class="link-name">Investopedia</span><span class="link-badge free">FREE</span></div><div class="link-desc">คำศัพท์ Finance ทุกคำ — <a href="https://investopedia.com" target="_blank">investopedia.com</a></div></div>
+      <div class="link-card"><div class="link-card-top"><span class="link-icon">🏛️</span><span class="link-name">Yale Financial Markets</span><span class="link-badge free">FREE</span></div><div class="link-desc">Audit ฟรีใน Coursera — Robert Shiller</div></div>
+      <div class="link-card"><div class="link-card-top"><span class="link-icon">🏦</span><span class="link-name">CFI (Corp Finance Inst)</span><span class="link-badge free">FREE</span></div><div class="link-desc">Financial Modeling Intro — <a href="https://corporatefinanceinstitute.com" target="_blank">CFI.com</a></div></div>
+      <div class="link-card"><div class="link-card-top"><span class="link-icon">🇹🇭</span><span class="link-name">SET e-Learning</span><span class="link-badge free">FREE</span></div><div class="link-desc">ตลาดหลักทรัพย์ไทย — <a href="https://elearning.set.or.th" target="_blank">elearning.set.or.th</a></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Datasets</div>
+    <div class="link-grid">
+      <div class="link-card"><div class="link-card-top"><span class="link-icon">🗃️</span><span class="link-name">Kaggle Datasets</span><span class="link-badge free">FREE</span></div><div class="link-desc">Finance datasets มากมาย — <a href="https://kaggle.com/datasets" target="_blank">kaggle.com</a></div></div>
+      <div class="link-card"><div class="link-card-top"><span class="link-icon">🇺🇸</span><span class="link-name">FRED (Federal Reserve)</span><span class="link-badge free">FREE</span></div><div class="link-desc">Economic &amp; Financial data — <a href="https://fred.stlouisfed.org" target="_blank">fred.stlouisfed.org</a></div></div>
+      <div class="link-card"><div class="link-card-top"><span class="link-icon">📉</span><span class="link-name">Yahoo Finance API</span><span class="link-badge free">FREE</span></div><div class="link-desc">ดึงราคาหุ้นด้วย yfinance (Python)</div></div>
+      <div class="link-card"><div class="link-card-top"><span class="link-icon">🌐</span><span class="link-name">data.go.th</span><span class="link-badge free">FREE</span></div><div class="link-desc">Open Data ภาครัฐไทย — <a href="https://data.go.th" target="_blank">data.go.th</a></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== PAGE: CAREER ========== -->
+<div class="page" id="pg-career">
+  <div class="page-header">
+    <div class="page-title">Career &amp; Salary 💰</div>
+    <div class="page-sub">เป้าหมายตำแหน่งและเงินเดือน สาย Data ในธนาคาร / FinTech ไทย</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">เงินเดือน Data Role — ธนาคาร &amp; FinTech ไทย</div>
+    <table class="salary-table">
+      <tr><th>ตำแหน่ง</th><th>ประสบการณ์</th><th>เงินเดือน (฿/เดือน)</th><th>หมายเหตุ</th></tr>
+      <tr><td>Junior Data Analyst</td><td>0–2 ปี</td><td class="salary-highlight">30,000–45,000</td><td style="font-size:12px;color:var(--text2)">เทียบเท่า ~$850–$1,300</td></tr>
+      <tr><td>Data Analyst</td><td>2–4 ปี</td><td class="salary-highlight">45,000–70,000</td><td style="font-size:12px;color:var(--text2)">KBTG/SCB Tech ให้สูงกว่า</td></tr>
+      <tr><td>Senior Data Analyst</td><td>4–7 ปี</td><td class="salary-highlight">70,000–110,000</td><td style="font-size:12px;color:var(--text2)">+bonus ตามผลงาน</td></tr>
+      <tr><td>Analytics Manager</td><td>7+ ปี</td><td class="salary-highlight">110,000–180,000</td><td style="font-size:12px;color:var(--text2)">รวม Stock/ESOP</td></tr>
+      <tr><td>Regional FinTech (Grab/Sea)</td><td>3+ ปี</td><td class="salary-highlight">$2,000–$5,000/เดือน</td><td style="font-size:12px;color:var(--text2)">Remote-friendly</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Top บริษัทที่น่าสมัคร</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div style="background:var(--surface2);border-radius:10px;padding:14px 16px;border:1px solid var(--border)">
+        <div style="font-size:13px;font-weight:600;color:var(--y2);margin-bottom:6px">🏦 ธนาคารไทย</div>
+        <div style="font-size:12px;color:var(--text2);line-height:2">KBTG (Kasikorn Business Technology)<br>SCB Tech<br>Kasikorn X (KBank FinTech Lab)<br>TTB Analytics<br>Bank of Thailand (ธปท.)</div>
+      </div>
+      <div style="background:var(--surface2);border-radius:10px;padding:14px 16px;border:1px solid var(--border)">
+        <div style="font-size:13px;font-weight:600;color:var(--y3);margin-bottom:6px">🚀 FinTech &amp; Startup</div>
+        <div style="font-size:12px;color:var(--text2);line-height:2">Ascend Money (TrueMoney)<br>Lightnet Group<br>2C2P Payment<br>Grab Financial (Regional)<br>Sea Money / ShopeePay</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Tips Interview สาย Data + Banking</div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="background:var(--surface2);border-radius:8px;padding:12px 14px;border-left:3px solid var(--accent)">
+        <div style="font-size:12px;font-weight:600;margin-bottom:3px">SQL Round</div>
+        <div style="font-size:12px;color:var(--text2)">ธนาคารส่วนใหญ่มี SQL Test — ฝึก Window Functions, GROUP BY, Subquery ให้คล่อง</div>
+      </div>
+      <div style="background:var(--surface2);border-radius:8px;padding:12px 14px;border-left:3px solid var(--accent2)">
+        <div style="font-size:12px;font-weight:600;margin-bottom:3px">Business Case</div>
+        <div style="font-size:12px;color:var(--text2)">เตรียม Case Study: "ถ้า default rate สูงขึ้น 5% คุณจะวิเคราะห์อย่างไร?" — ตอบเป็น framework</div>
+      </div>
+      <div style="background:var(--surface2);border-radius:8px;padding:12px 14px;border-left:3px solid var(--accent3)">
+        <div style="font-size:12px;font-weight:600;margin-bottom:3px">Portfolio</div>
+        <div style="font-size:12px;color:var(--text2)">เตรียม GitHub Portfolio พร้อม 3 projects — Interviewer จะถามทุก project อย่างละเอียด</div>
+      </div>
+      <div style="background:var(--surface2);border-radius:8px;padding:12px 14px;border-left:3px solid var(--danger)">
+        <div style="font-size:12px;font-weight:600;margin-bottom:3px">Domain Knowledge</div>
+        <div style="font-size:12px;color:var(--text2)">ทำความเข้าใจ: LTV Ratio, NPL, Credit Score, Basel III — Finance Term ที่ถามบ่อย</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== PAGE: LOG ========== -->
+<div class="page" id="pg-log">
+  <div class="page-header">
+    <div class="page-title">Activity Log 📝</div>
+    <div class="page-sub">บันทึกสิ่งที่เรียนรู้วันนี้ — เก็บไว้ดูพัฒนาการของตัวเอง</div>
+  </div>
+
+  <div class="log-input-wrap">
+    <textarea class="log-textarea" id="log-input" placeholder="วันนี้เรียนอะไร? ทำอะไรสำเร็จ? เจอปัญหาอะไร?"></textarea>
+    <button class="btn-log" onclick="addLog()">บันทึก</button>
+  </div>
+
+  <div id="log-list"><div class="log-empty">ยังไม่มี log — เริ่มบันทึกได้เลย!</div></div>
+</div>
+
+</main>
+</div>
+
+<script>
+const KEY = 'dst_v2';
+
+function load() {
+  try { return JSON.parse(localStorage.getItem(KEY) || '{}'); } catch { return {}; }
+}
+function save(d) { localStorage.setItem(KEY, JSON.stringify(d)); }
+
+// ---- NAVIGATION ----
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const map = {
+    'pg-dashboard':'Dashboard','pg-today':'วันนี้','pg-roadmap':'Roadmap',
+    'pg-projects':'Projects','pg-resources':'แหล่งเรียน','pg-career':'Career','pg-log':'Log'
+  };
+  document.querySelectorAll('.nav-item').forEach(n => {
+    if(n.textContent.trim().includes(map[id]||'')) n.classList.add('active');
+  });
+  // match by onclick
+  document.querySelectorAll('.nav-item').forEach(n => {
+    if(n.getAttribute('onclick') === `showPage('${id}')`) n.classList.add('active');
+  });
+}
+
+// ---- ROADMAP CHECKBOXES ----
+const yearTotals = {y1:6, y2:6, y3:6, y4:5};
+
+function toggleCheck(e, id) {
+  e.stopPropagation();
+  const d = load();
+  if(!d.courses) d.courses = {};
+  d.courses[id] = !d.courses[id];
+  if(!d.courses[id]) delete d.courses[id];
+  save(d);
+  renderCourses();
+  updateStats();
+}
+
+function toggleCourse(row) {
+  const card = row.closest('.course-card');
+  card.classList.toggle('expanded');
+}
+
+function togglePhase(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+
+function renderCourses() {
+  const d = load();
+  const courses = d.courses || {};
+  document.querySelectorAll('.course-card').forEach(card => {
+    const id = card.dataset.id;
+    const cb = document.getElementById('cb-' + id);
+    if(!cb) return;
+    if(courses[id]) {
+      cb.classList.add('checked');
+      card.classList.add('done');
+    } else {
+      cb.classList.remove('checked');
+      card.classList.remove('done');
+    }
+  });
+}
+
+// ---- DAILY ----
+const DAILY_ITEMS = [
+  {text:'ฝึก SQL / LeetCode SQL 50', tag:'SQL'},
+  {text:'อ่าน Python หรือทำ notebook', tag:'Python'},
+  {text:'ดู course วันนี้ (Coursera/YouTube)', tag:'Course'},
+  {text:'อ่าน Finance news (SET/Bloomberg)', tag:'Finance'},
+  {text:'บันทึก Activity Log', tag:'Log'},
+  {text:'ทำโปรเจ็ค (ส่วนหนึ่ง)', tag:'Project'},
+  {text:'ทบทวน concept ที่ยาก', tag:'Review'},
+  {text:'LinkedIn / networking', tag:'Career'},
+  {text:'Commit code ลง GitHub', tag:'GitHub'},
+];
+
+function getTodayKey() {
+  return 'daily_' + new Date().toISOString().slice(0,10);
+}
+
+function renderDaily() {
+  const d = load();
+  const todayKey = getTodayKey();
+  const checked = (d[todayKey] && d[todayKey].checked) ? d[todayKey].checked : [];
+  const list = document.getElementById('daily-list');
+  if(!list) return;
+  list.innerHTML = '';
+  DAILY_ITEMS.forEach((item, i) => {
+    const isChecked = checked.includes(i);
+    const div = document.createElement('div');
+    div.className = 'daily-item' + (isChecked ? ' checked' : '');
+    div.onclick = () => toggleDaily(i);
+    div.innerHTML = `<div class="daily-cb${isChecked ? ' checked' : ''}" id="dcb-${i}"></div>
+      <span class="daily-text">${item.text}</span>
+      <span class="daily-tag">${item.tag}</span>`;
+    list.appendChild(div);
+  });
+  const cnt = checked.length;
+  const countEl = document.getElementById('today-count');
+  const fillEl = document.getElementById('daily-fill');
+  if(countEl) countEl.textContent = cnt + '/9';
+  if(fillEl) fillEl.style.width = (cnt/9*100) + '%';
+}
+
+function toggleDaily(idx) {
+  const d = load();
+  const todayKey = getTodayKey();
+  if(!d[todayKey]) d[todayKey] = {checked:[]};
+  if(!d[todayKey].checked) d[todayKey].checked = [];
+  const arr = d[todayKey].checked;
+  const pos = arr.indexOf(idx);
+  if(pos > -1) arr.splice(pos, 1); else arr.push(idx);
+  // update streak
+  if(!d.lastActivity || d.lastActivity !== new Date().toISOString().slice(0,10)) {
+    const yesterday = new Date(); yesterday.setDate(yesterday.getDate()-1);
+    const yKey = yesterday.toISOString().slice(0,10);
+    if(d.lastActivity === yKey) d.streak = (d.streak||0)+1;
+    else if(d.lastActivity !== new Date().toISOString().slice(0,10)) d.streak = 1;
+    d.lastActivity = new Date().toISOString().slice(0,10);
+    d.totalDays = (d.totalDays||0) + (d.lastActivity !== d.prevLast ? 1 : 0);
+    d.prevLast = d.lastActivity;
+  }
+  save(d);
+  renderDaily();
+  updateStats();
+}
+
+function resetDaily() {
+  const d = load();
+  delete d[getTodayKey()];
+  save(d);
+  renderDaily();
+}
+
+// ---- PROJECTS ----
+const PROJECT_IDS = ['p1a','p1b','p2a','p2b','p3a','p3b','p4a','p4b'];
+
+function renderProjects() {
+  const d = load();
+  const projects = d.projects || {};
+  let done = 0;
+  PROJECT_IDS.forEach(id => {
+    const card = document.getElementById('proj-' + id);
+    const st = document.getElementById('st-' + id);
+    const inp = document.getElementById('in-' + id);
+    const btn = card ? card.querySelector('.btn-submit') : null;
+    if(projects[id] && projects[id].submitted) {
+      done++;
+      if(card) card.classList.add('submitted');
+      if(st) { st.textContent = '✓ ส่งแล้ว'; st.classList.add('done'); }
+      if(inp && projects[id].link) inp.value = projects[id].link;
+      if(btn) { btn.textContent = '✓ Submitted'; btn.classList.add('done'); }
+    }
+  });
+  const fill = document.getElementById('proj-fill');
+  const cnt = document.getElementById('proj-count');
+  if(fill) fill.style.width = (done/8*100) + '%';
+  if(cnt) cnt.textContent = done + '/8 projects submitted';
+}
+
+function submitProject(id) {
+  const inp = document.getElementById('in-' + id);
+  const link = inp ? inp.value.trim() : '';
+  const d = load();
+  if(!d.projects) d.projects = {};
+  d.projects[id] = {submitted: true, link: link};
+  save(d);
+  renderProjects();
+  updateStats();
+}
+
+// ---- LOG ----
+function addLog() {
+  const inp = document.getElementById('log-input');
+  const text = inp ? inp.value.trim() : '';
+  if(!text) return;
+  const d = load();
+  if(!d.logs) d.logs = [];
+  d.logs.unshift({text, date: new Date().toLocaleString('th-TH')});
+  if(d.logs.length > 100) d.logs = d.logs.slice(0,100);
+  save(d);
+  if(inp) inp.value = '';
+  renderLog();
+}
+
+function renderLog() {
+  const d = load();
+  const logs = d.logs || [];
+  const list = document.getElementById('log-list');
+  if(!list) return;
+  if(logs.length === 0) { list.innerHTML = '<div class="log-empty">ยังไม่มี log — เริ่มบันทึกได้เลย!</div>'; return; }
+  list.innerHTML = logs.map(l =>
+    `<div class="log-item"><div class="log-date">${l.date}</div><div class="log-text">${l.text}</div></div>`
+  ).join('');
+}
+
+// ---- STATS ----
+function updateStats() {
+  const d = load();
+  const courses = d.courses || {};
+  const totals = {y1:6, y2:6, y3:6, y4:5};
+  const counts = {y1:0, y2:0, y3:0, y4:0};
+
+  document.querySelectorAll('.course-card').forEach(card => {
+    const year = card.dataset.year;
+    const id = card.dataset.id;
+    if(courses[id] && counts[year] !== undefined) counts[year]++;
+  });
+
+  let totalDone = 0, totalAll = 23;
+  ['y1','y2','y3','y4'].forEach(y => {
+    const t = totals[y];
+    const done = counts[y];
+    totalDone += done;
+    const pct = Math.round(done/t*100);
+    const el = document.getElementById('cnt-' + y);
+    if(el) el.textContent = done + '/' + t;
+    // dashboard bars
+    const fill = document.getElementById('fill-' + y);
+    if(fill) fill.style.width = pct + '%';
+    const dashEl = document.getElementById('dash-p' + y.slice(1));
+    if(dashEl) dashEl.textContent = done + '/' + t;
+    // sidebar pills
+    const pillFill = document.getElementById('pill-' + y);
+    if(pillFill) pillFill.style.width = pct + '%';
+    const pillPct = document.getElementById('pct-' + y);
+    if(pillPct) pillPct.textContent = pct + '%';
+  });
+
+  const overallPct = Math.round(totalDone/totalAll*100);
+  const statPct = document.getElementById('stat-pct');
+  if(statPct) statPct.textContent = overallPct + '%';
+
+  // projects
+  const projects = d.projects || {};
+  let projDone = PROJECT_IDS.filter(id => projects[id] && projects[id].submitted).length;
+  const statProj = document.getElementById('stat-proj');
+  if(statProj) statProj.textContent = projDone + '/8';
+
+  // streak
+  const statStreak = document.getElementById('stat-streak');
+  if(statStreak) statStreak.textContent = (d.streak || 0) + ' 🔥';
+
+  // days
+  const statDays = document.getElementById('stat-days');
+  if(statDays) statDays.textContent = d.totalDays || 0;
+}
+
+// ---- DASHBOARD INIT ----
+function initDashboard() {
+  const now = new Date();
+  const hours = now.getHours();
+  let greet = hours < 12 ? 'อรุณสวัสดิ์ ☀️' : hours < 17 ? 'สวัสดีตอนบ่าย 🌤' : 'สวัสดีตอนเย็น 🌙';
+  const g = document.getElementById('dash-greeting');
+  if(g) g.textContent = greet + ' — DST Roadmap';
+  const dateEl = document.getElementById('dash-date');
+  if(dateEl) dateEl.textContent = now.toLocaleDateString('th-TH', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+  const todayEl = document.getElementById('today-date');
+  if(todayEl) todayEl.textContent = now.toLocaleDateString('th-TH', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+}
+
+// ---- INIT ----
+function init() {
+  initDashboard();
+  renderCourses();
+  renderDaily();
+  renderProjects();
+  renderLog();
+  updateStats();
+}
+
+init();
+</script>
+</body>
+</html>
