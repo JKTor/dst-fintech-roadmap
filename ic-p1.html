@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>à¸•à¸´à¸§à¸ªà¸­à¸š IC Plain (P1) â€” à¸„à¸£à¸šà¸ˆà¸šà¹ƒà¸™à¸«à¸™à¹‰à¸²à¹€à¸”à¸µà¸¢à¸§</title>
+<style>
+  :root{
+    --bg:#f4f6f8;--surface:#fff;--surface-2:#eef1f4;--ink:#16202b;--ink-soft:#4a5867;
+    --ink-faint:#7b8896;--line:#dde3e9;--accent:#b7791f;--accent-soft:#f5e9d0;
+    --teal:#1d5c66;--teal-soft:#e0eef0;--new:#a3341f;--new-soft:#f7e4df;--done:#1f7a54;--done-soft:#e2f0e9;
+    --bad:#b3261e;--bad-soft:#f7e0de;
+    --shadow:0 1px 2px rgba(22,32,43,.06),0 6px 20px rgba(22,32,43,.05);
+  }
+  @media (prefers-color-scheme:dark){:root{
+    --bg:#0e1519;--surface:#151f26;--surface-2:#1b2830;--ink:#e7edf1;--ink-soft:#a6b4be;
+    --ink-faint:#6f8089;--line:#26343d;--accent:#e0a94a;--accent-soft:#2c2415;
+    --teal:#5fb0bd;--teal-soft:#12262a;--new:#e8836e;--new-soft:#2c1712;--done:#4bbf8c;--done-soft:#14261f;
+    --bad:#e8756b;--bad-soft:#2c1513;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+  }}
+  :root[data-theme="light"]{--bg:#f4f6f8;--surface:#fff;--surface-2:#eef1f4;--ink:#16202b;--ink-soft:#4a5867;--ink-faint:#7b8896;--line:#dde3e9;--accent:#b7791f;--accent-soft:#f5e9d0;--teal:#1d5c66;--teal-soft:#e0eef0;--new:#a3341f;--new-soft:#f7e4df;--done:#1f7a54;--done-soft:#e2f0e9;--bad:#b3261e;--bad-soft:#f7e0de;--shadow:0 1px 2px rgba(22,32,43,.06),0 6px 20px rgba(22,32,43,.05);}
+  :root[data-theme="dark"]{--bg:#0e1519;--surface:#151f26;--surface-2:#1b2830;--ink:#e7edf1;--ink-soft:#a6b4be;--ink-faint:#6f8089;--line:#26343d;--accent:#e0a94a;--accent-soft:#2c2415;--teal:#5fb0bd;--teal-soft:#12262a;--new:#e8836e;--new-soft:#2c1712;--done:#4bbf8c;--done-soft:#14261f;--bad:#e8756b;--bad-soft:#2c1513;--shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);}
+
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);line-height:1.62;-webkit-font-smoothing:antialiased;
+    font-family:'Sarabun','IBM Plex Sans Thai','Noto Sans Thai',system-ui,-apple-system,'Segoe UI',sans-serif;}
+  .wrap{max-width:760px;margin:0 auto;padding:0 18px 90px;}
+  h1,h2,h3{letter-spacing:-.01em;}
+
+  /* Masthead */
+  header.top{padding:30px 18px 18px;max-width:760px;margin:0 auto;}
+  .eyebrow{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:700;margin:0 0 6px;}
+  header.top h1{font-size:1.7rem;margin:0 0 6px;text-wrap:balance;}
+  header.top p{color:var(--ink-soft);margin:0;font-size:.95rem;}
+
+  /* Sticky nav */
+  nav{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);
+    backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
+  .nav-inner{max-width:760px;margin:0 auto;display:flex;gap:4px;overflow-x:auto;padding:8px 12px;scrollbar-width:none;}
+  .nav-inner::-webkit-scrollbar{display:none;}
+  nav button{flex:none;background:none;border:0;font:inherit;font-size:.86rem;font-weight:600;color:var(--ink-faint);
+    padding:8px 13px;border-radius:9px;cursor:pointer;white-space:nowrap;transition:all .18s;}
+  nav button:hover{color:var(--ink);}
+  nav button.active{background:var(--accent);color:#fff;}
+  @media (prefers-color-scheme:dark){nav button.active{color:#12181c;}}
+  :root[data-theme="dark"] nav button.active{color:#12181c;}
+  :root[data-theme="light"] nav button.active{color:#fff;}
+
+  section.page{display:none;animation:fade .3s;}
+  section.page.on{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:0 0 15px;box-shadow:var(--shadow);}
+  h2.sec{font-size:1.35rem;margin:26px 0 4px;}
+  .sec-note{color:var(--ink-faint);font-size:.86rem;margin:0 0 16px;}
+
+  .facts{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 18px;}
+  .fact{flex:1 1 100px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;box-shadow:var(--shadow);}
+  .fact .n{font-size:1.2rem;font-weight:700;color:var(--teal);font-variant-numeric:tabular-nums;}
+  .fact .t{font-size:.76rem;color:var(--ink-soft);margin-top:2px;}
+
+  ul.pts{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;}
+  ul.pts li{position:relative;padding-left:19px;font-size:.93rem;}
+  ul.pts li::before{content:"";position:absolute;left:2px;top:9px;width:7px;height:7px;border-radius:2px;background:var(--accent);transform:rotate(45deg);}
+  .term{color:var(--teal);font-weight:700;}
+  .badge{font-size:.64rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:99px;}
+  .badge.new{background:var(--new-soft);color:var(--new);}
+  .badge.upd{background:var(--teal-soft);color:var(--teal);}
+  .hint{margin-top:11px;font-size:.84rem;background:var(--accent-soft);color:var(--ink);border-radius:9px;padding:9px 12px;}
+  .hint b{color:var(--accent);}
+
+  /* checklist */
+  .phase-head{display:flex;align-items:center;gap:9px;margin:22px 0 4px;}
+  .phase-num{flex:none;width:25px;height:25px;border-radius:8px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);font-weight:700;font-size:.8rem;}
+  .phase-head h3{font-size:1.05rem;margin:0;}
+  label.item{display:flex;gap:11px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:12px 14px;cursor:pointer;transition:border-color .2s;margin-bottom:7px;}
+  label.item:hover{border-color:var(--accent);}
+  .item input{position:absolute;opacity:0;width:0;height:0;}
+  .box{flex:none;width:21px;height:21px;border-radius:6px;border:2px solid var(--line);display:grid;place-items:center;margin-top:1px;transition:all .18s;}
+  .box svg{width:12px;height:12px;stroke:#fff;stroke-width:3.4;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:20;stroke-dashoffset:20;transition:stroke-dashoffset .22s;}
+  .item input:checked ~ .box{background:var(--done);border-color:var(--done);}
+  .item input:checked ~ .box svg{stroke-dashoffset:0;}
+  .it-title{font-weight:600;font-size:.94rem;}
+  .item input:checked ~ .it-body .it-title{color:var(--ink-faint);text-decoration:line-through;}
+  .it-desc{font-size:.82rem;color:var(--ink-soft);margin-top:2px;}
+  .bar{height:9px;background:var(--surface-2);border-radius:99px;overflow:hidden;margin-top:6px;}
+  .bar>span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--teal));border-radius:99px;transition:width .35s;}
+
+  /* formulas */
+  .fml{background:var(--surface-2);border-radius:9px;padding:11px 14px;margin:8px 0;font-size:.95rem;
+    font-family:'Cambria Math','DejaVu Serif',Georgia,serif;overflow-x:auto;}
+  .fml b{color:var(--teal);}
+  .eg{font-size:.85rem;color:var(--ink-soft);border-left:3px solid var(--accent);padding:2px 0 2px 12px;margin:8px 0 0;}
+  .eg b{color:var(--accent);}
+
+  /* quiz */
+  .q{margin-bottom:14px;}
+  .q .stem{font-weight:600;font-size:.95rem;margin-bottom:9px;}
+  .q .stem .qn{color:var(--accent);}
+  .opt{display:block;border:1px solid var(--line);border-radius:10px;padding:10px 13px;margin-bottom:7px;cursor:pointer;font-size:.9rem;transition:all .15s;background:var(--surface);}
+  .opt:hover{border-color:var(--accent);}
+  .opt.sel{border-color:var(--accent);background:var(--accent-soft);}
+  .opt.correct{border-color:var(--done);background:var(--done-soft);}
+  .opt.wrong{border-color:var(--bad);background:var(--bad-soft);}
+  .opt input{margin-right:8px;}
+  .expl{display:none;font-size:.85rem;background:var(--teal-soft);color:var(--ink);border-radius:9px;padding:9px 12px;margin-top:4px;}
+  .expl.show{display:block;}
+  .expl b{color:var(--teal);}
+  .quizbtn{background:var(--accent);color:#fff;border:0;font:inherit;font-weight:700;padding:12px 22px;border-radius:99px;cursor:pointer;font-size:.95rem;}
+  :root[data-theme="dark"] .quizbtn{color:#12181c;}
+  .score{text-align:center;font-size:1.1rem;font-weight:700;margin:14px 0;padding:14px;border-radius:12px;background:var(--surface);border:1px solid var(--line);}
+  .score .big{font-size:1.8rem;color:var(--teal);display:block;font-variant-numeric:tabular-nums;}
+
+  /* flashcards */
+  .fc-wrap{perspective:1200px;margin:10px 0;}
+  .fc{position:relative;width:100%;min-height:210px;cursor:pointer;transition:transform .5s;transform-style:preserve-3d;}
+  .fc.flip{transform:rotateY(180deg);}
+  .fc-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:16px;border:1px solid var(--line);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:26px;box-shadow:var(--shadow);}
+  .fc-front{background:var(--surface);}
+  .fc-back{background:var(--teal-soft);transform:rotateY(180deg);}
+  .fc-face .lab{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);position:absolute;top:14px;left:0;right:0;}
+  .fc-front .q{font-size:1.25rem;font-weight:700;margin:0;}
+  .fc-back .a{font-size:1rem;color:var(--ink);margin:0;}
+  .fc-tap{position:absolute;bottom:12px;left:0;right:0;font-size:.72rem;color:var(--ink-faint);}
+  .fc-nav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;}
+  .fc-nav button{background:var(--surface);border:1px solid var(--line);color:var(--ink);font:inherit;font-weight:600;padding:9px 16px;border-radius:99px;cursor:pointer;}
+  .fc-nav button:hover{border-color:var(--accent);}
+  .fc-count{font-size:.85rem;color:var(--ink-soft);font-variant-numeric:tabular-nums;}
+
+  /* resources */
+  .res{display:flex;gap:12px;align-items:flex-start;padding:13px 0;border-bottom:1px solid var(--line);}
+  .res:last-child{border-bottom:0;}
+  .res .ic{flex:none;width:34px;height:34px;border-radius:9px;background:var(--teal-soft);display:grid;place-items:center;font-size:1.1rem;}
+  .res .rt{font-weight:600;font-size:.93rem;}
+  .res .rt a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--accent);}
+  .res .rd{font-size:.82rem;color:var(--ink-soft);margin-top:1px;}
+  .res .rd a{color:var(--accent);word-break:break-all;}
+
+  .tbl-scroll{overflow-x:auto;}
+  table{border-collapse:collapse;width:100%;font-size:.86rem;min-width:380px;margin:6px 0;}
+  th,td{text-align:left;padding:8px 11px;border-bottom:1px solid var(--line);vertical-align:top;}
+  thead th{background:var(--surface-2);font-size:.74rem;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft);}
+  tbody th{color:var(--ink-soft);white-space:nowrap;font-weight:600;}
+  .reset{margin-top:16px;text-align:center;}
+  .reset button{background:none;border:1px solid var(--line);color:var(--ink-faint);font:inherit;font-size:.82rem;padding:7px 16px;border-radius:99px;cursor:pointer;}
+  .reset button:hover{border-color:var(--accent);color:var(--accent);}
+  .foot{text-align:center;color:var(--ink-faint);font-size:.75rem;margin-top:26px;}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a href="index.html" style="display:inline-block;margin-bottom:12px;font-size:.82rem;color:var(--ink-faint);text-decoration:none">â† à¸à¸¥à¸±à¸šà¸ªà¸¹à¹ˆ DST Roadmap</a>
+  <p class="eyebrow">à¸œà¸¹à¹‰à¹à¸™à¸°à¸™à¸³à¸à¸²à¸£à¸¥à¸‡à¸—à¸¸à¸™à¸•à¸£à¸²à¸ªà¸²à¸£à¸—à¸±à¹ˆà¸§à¹„à¸› Â· à¸„à¸¹à¹ˆà¸¡à¸·à¸­ v4</p>
+  <h1>à¸•à¸´à¸§à¸ªà¸­à¸š IC Plain (P1) â€” à¸„à¸£à¸šà¸ˆà¸šà¹ƒà¸™à¸«à¸™à¹‰à¸²à¹€à¸”à¸µà¸¢à¸§</h1>
+  <p>à¸ à¸²à¸žà¸£à¸§à¸¡ Â· à¹€à¸Šà¹‡à¸„à¸¥à¸´à¸ªà¸•à¹Œ Â· à¸ªà¸¹à¸•à¸£à¸„à¸³à¸™à¸§à¸“ Â· à¸Šà¸¸à¸”à¸‚à¹‰à¸­à¸ªà¸­à¸š Â· à¹à¸Ÿà¸¥à¸Šà¸à¸²à¸£à¹Œà¸” Â· à¹à¸«à¸¥à¹ˆà¸‡à¹€à¸£à¸µà¸¢à¸™à¸£à¸¹à¹‰</p>
+</header>
+
+<nav><div class="nav-inner" id="nav">
+  <button data-t="home" class="active">à¸ à¸²à¸žà¸£à¸§à¸¡</button>
+  <button data-t="check">à¹€à¸Šà¹‡à¸„à¸¥à¸´à¸ªà¸•à¹Œ</button>
+  <button data-t="calc">à¸ªà¸¹à¸•à¸£à¸„à¸³à¸™à¸§à¸“</button>
+  <button data-t="quiz">à¸Šà¸¸à¸”à¸‚à¹‰à¸­à¸ªà¸­à¸š</button>
+  <button data-t="flash">à¹à¸Ÿà¸¥à¸Šà¸à¸²à¸£à¹Œà¸”</button>
+  <button data-t="res">à¹à¸«à¸¥à¹ˆà¸‡à¹€à¸£à¸µà¸¢à¸™à¸£à¸¹à¹‰</button>
+</div></nav>
+
+<div class="wrap">
+
+  <!-- ============ HOME ============ -->
+  <section class="page on" id="home">
+    <h2 class="sec">à¸£à¸¹à¹‰à¸ˆà¸±à¸à¸‚à¹‰à¸­à¸ªà¸­à¸šà¸à¹ˆà¸­à¸™à¸¥à¸¸à¸¢</h2>
+    <p class="sec-note">à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸ˆà¸²à¸à¸„à¸¹à¹ˆà¸¡à¸·à¸­à¸—à¸”à¸ªà¸­à¸šà¸«à¸¥à¸±à¸à¸ªà¸¹à¸•à¸£ P1 Version 4 (à¹ƒà¸Šà¹‰à¸ªà¸­à¸šà¸•à¸±à¹‰à¸‡à¹à¸•à¹ˆ 1 à¸.à¸¢. 2566)</p>
+    <div class="facts">
+      <div class="fact"><div class="n">100 à¸‚à¹‰à¸­</div><div class="t">à¸›à¸£à¸™à¸±à¸¢ 4 à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸</div></div>
+      <div class="fact"><div class="n">2 à¸Šà¸¡. 30 à¸™.</div><div class="t">à¹€à¸§à¸¥à¸²à¸—à¸³</div></div>
+      <div class="fact"><div class="n">~1,200à¸¿</div><div class="t">à¸„à¹ˆà¸²à¸ªà¸­à¸š (à¸ à¸²à¸©à¸²à¹„à¸—à¸¢)</div></div>
+    </div>
+    <div class="card">
+      <h3 style="margin:0 0 10px">à¹€à¸à¸“à¸‘à¹Œà¸œà¹ˆà¸²à¸™ (à¸ªà¸³à¸„à¸±à¸à¸¡à¸²à¸)</h3>
+      <ul class="pts">
+        <li>à¸•à¹‰à¸­à¸‡à¹„à¸”à¹‰ <b>70% à¸‚à¸­à¸‡à¸„à¸°à¹à¸™à¸™à¸£à¸§à¸¡</b> <span class="term">à¹à¸¥à¸°</span> <b>70% à¸‚à¸­à¸‡à¸«à¸¡à¸§à¸”à¸—à¸µà¹ˆ 2</b> (à¸à¸Ž+à¸ˆà¸£à¸£à¸¢à¸²à¸šà¸£à¸£à¸“) à¸žà¸£à¹‰à¸­à¸¡à¸à¸±à¸™</li>
+        <li>à¸•à¸à¸«à¸¡à¸§à¸” 2 = à¸•à¸à¸—à¸±à¹‰à¸‡à¸Šà¸¸à¸” à¹à¸¡à¹‰à¸„à¸°à¹à¸™à¸™à¸£à¸§à¸¡à¸–à¸¶à¸‡ â†’ <b>à¸«à¹‰à¸²à¸¡à¸—à¸´à¹‰à¸‡à¸«à¸¡à¸§à¸” 2 à¹€à¸”à¹‡à¸”à¸‚à¸²à¸”</b></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 style="margin:0 0 10px">à¹‚à¸„à¸£à¸‡à¸ªà¸£à¹‰à¸²à¸‡ 3 à¸«à¸¡à¸§à¸”</h3>
+      <div class="tbl-scroll"><table>
+        <thead><tr><th>à¸«à¸¡à¸§à¸”</th><th>à¹€à¸™à¸·à¹‰à¸­à¸«à¸²</th><th>à¸ˆà¸³à¸™à¸§à¸™à¸‚à¹‰à¸­</th></tr></thead>
+        <tbody>
+          <tr><th>1</th><td>à¸„à¸§à¸²à¸¡à¸£à¸¹à¹‰à¸žà¸·à¹‰à¸™à¸à¸²à¸™ (à¹€à¸¨à¸£à¸©à¸à¸à¸´à¸ˆ, à¸œà¸¥à¸•à¸­à¸šà¹à¸—à¸™/à¸„à¸§à¸²à¸¡à¹€à¸ªà¸µà¹ˆà¸¢à¸‡, à¸§à¸´à¹€à¸„à¸£à¸²à¸°à¸«à¹Œ)</td><td>30</td></tr>
+          <tr><th>2</th><td>à¸à¸Žà¸£à¸°à¹€à¸šà¸µà¸¢à¸š + à¸ˆà¸£à¸£à¸¢à¸²à¸šà¸£à¸£à¸“ + Suitability</td><td>20</td></tr>
+          <tr><th>3</th><td>à¸œà¸¥à¸´à¸•à¸ à¸±à¸“à¸‘à¹Œà¸•à¸£à¸²à¸ªà¸²à¸£à¸—à¸±à¹ˆà¸§à¹„à¸› (à¸«à¸¸à¹‰à¸™, à¸•à¸£à¸²à¸ªà¸²à¸£à¸«à¸™à¸µà¹‰, à¸à¸­à¸‡à¸—à¸¸à¸™)</td><td>50</td></tr>
+        </tbody>
+      </table></div>
+      <div class="hint"><b>à¸à¸¥à¸¢à¸¸à¸—à¸˜à¹Œà¸—à¸³à¸„à¸°à¹à¸™à¸™:</b> à¸«à¸¡à¸§à¸” 3 à¸‚à¹‰à¸­à¹€à¸¢à¸­à¸°à¸ªà¸¸à¸” (50) à¹€à¸à¹‡à¸šà¹ƒà¸«à¹‰à¹„à¸”à¹‰à¹€à¸¢à¸­à¸° Â· à¸«à¸¡à¸§à¸” 2 à¸•à¹‰à¸­à¸‡à¸œà¹ˆà¸²à¸™ 70% à¹à¸¢à¸ à¸—à¹ˆà¸­à¸‡à¹ƒà¸«à¹‰à¹à¸¡à¹ˆà¸™ Â· à¸«à¸¡à¸§à¸” 1 à¸¡à¸µà¸„à¸³à¸™à¸§à¸“ à¸à¸¶à¸à¹‚à¸ˆà¸—à¸¢à¹Œà¹ƒà¸«à¹‰à¸„à¸¥à¹ˆà¸­à¸‡</div>
+    </div>
+
+    <h2 class="sec">à¹€à¸™à¸·à¹‰à¸­à¸«à¸²à¹ƒà¸«à¸¡à¹ˆ v4 à¸—à¸µà¹ˆà¸•à¹‰à¸­à¸‡à¹€à¸™à¹‰à¸™</h2>
+    <p class="sec-note">à¸‚à¸­à¸‡à¸—à¸µà¹ˆà¹€à¸žà¸´à¹ˆà¸‡à¹€à¸žà¸´à¹ˆà¸¡ â€” à¸Šà¸µà¸—à¹€à¸à¹ˆà¸²à¸¡à¸±à¸à¹„à¸¡à¹ˆà¸¡à¸µ à¹à¸•à¹ˆà¸­à¸­à¸à¸ªà¸­à¸šà¹à¸™à¹ˆ</p>
+    <div class="card">
+      <ul class="pts">
+        <li><b>à¸ªà¸´à¸™à¸—à¸£à¸±à¸žà¸¢à¹Œà¸”à¸´à¸ˆà¸´à¸—à¸±à¸¥</b> <span class="badge new">à¹ƒà¸«à¸¡à¹ˆ</span> â€” 3 à¸Šà¹ˆà¸­à¸‡à¸—à¸²à¸‡ (à¸¨à¸¹à¸™à¸¢à¹Œà¸‹à¸·à¹‰à¸­à¸‚à¸²à¸¢/à¸™à¸²à¸¢à¸«à¸™à¹‰à¸²/à¸œà¸¹à¹‰à¸„à¹‰à¸²) + à¸„à¸§à¸²à¸¡à¹€à¸ªà¸µà¹ˆà¸¢à¸‡ 4 à¹à¸šà¸š</li>
+        <li><b>DRx</b> (Fractional DR) <span class="badge new">à¹ƒà¸«à¸¡à¹ˆ</span> â€” à¸‹à¸·à¹‰à¸­à¹€à¸¨à¸©à¸«à¸™à¹ˆà¸§à¸¢à¹„à¸”à¹‰ 0.0001 Â· à¸„à¸¸à¸¡à¸£à¸²à¸„à¸²à¹à¸šà¸š Dynamic Price Band Â±10%</li>
+        <li><b>ESG / à¸à¸²à¸£à¸¥à¸‡à¸—à¸¸à¸™à¸¢à¸±à¹ˆà¸‡à¸¢à¸·à¸™</b> <span class="badge upd">à¸­à¸±à¸›à¹€à¸”à¸•</span> â€” 4 à¹à¸™à¸§à¸—à¸²à¸‡ + à¸•à¸£à¸²à¸ªà¸²à¸£à¸«à¸™à¸µà¹‰ ESG 4 à¸›à¸£à¸°à¹€à¸ à¸—</li>
+        <li><b>LiVEx</b> &amp; à¸•à¸¥à¸²à¸”à¸£à¸­à¸‡à¸¢à¸¸à¸„à¹ƒà¸«à¸¡à¹ˆ <span class="badge upd">à¸­à¸±à¸›à¹€à¸”à¸•</span> â€” Auction à¸§à¸±à¸™à¸¥à¸°à¸£à¸­à¸š à¹„à¸¡à¹ˆà¸¡à¸µà¹€à¸žà¸”à¸²à¸™à¸£à¸²à¸„à¸²</li>
+        <li><b>à¸à¸¥à¹„à¸à¸‹à¸·à¹‰à¸­à¸‚à¸²à¸¢</b> <span class="badge upd">à¸­à¸±à¸›à¹€à¸”à¸•</span> â€” à¹‚à¸—à¸©à¹à¸žà¹ˆà¸‡, à¸à¸²à¸£à¹€à¸›à¸´à¸”à¹€à¸œà¸¢à¸‚à¹‰à¸­à¸¡à¸¹à¸¥, à¸”à¸±à¸Šà¸™à¸µ</li>
+      </ul>
+      <div class="hint"><b>à¹€à¸ˆà¸²à¸°à¸¥à¸¶à¸à¸«à¸±à¸§à¸‚à¹‰à¸­à¸žà¸§à¸à¸™à¸µà¹‰:</b> à¸”à¸¹à¹‚à¸™à¹‰à¸•à¸ªà¸£à¸¸à¸›à¹€à¸™à¸·à¹‰à¸­à¸«à¸²à¹ƒà¸«à¸¡à¹ˆà¹à¸šà¸šà¹€à¸•à¹‡à¸¡à¸—à¸µà¹ˆà¸—à¸³à¹à¸¢à¸à¹„à¸§à¹‰ (à¸¥à¸´à¸‡à¸à¹Œà¹ƒà¸™à¹à¸—à¹‡à¸š "à¹à¸«à¸¥à¹ˆà¸‡à¹€à¸£à¸µà¸¢à¸™à¸£à¸¹à¹‰")</div>
+    </div>
+  </section>
+
+  <!-- ============ CHECKLIST ============ -->
+  <section class="page" id="check">
+    <h2 class="sec">à¹€à¸Šà¹‡à¸„à¸¥à¸´à¸ªà¸•à¹Œà¹€à¸•à¸£à¸µà¸¢à¸¡à¸ªà¸­à¸š</h2>
+    <p class="sec-note">à¸•à¸´à¹Šà¸à¹„à¸”à¹‰ Â· à¸šà¸±à¸™à¸—à¸¶à¸à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´à¹ƒà¸™à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡</p>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;font-size:.9rem;"><b>à¸„à¸§à¸²à¸¡à¸„à¸·à¸šà¸«à¸™à¹‰à¸²</b><span class="term" id="ck-count">0/0</span></div>
+      <div class="bar"><span id="ck-fill"></span></div>
+    </div>
+    <div id="checklist"></div>
+    <div class="reset"><button id="ck-reset" type="button">à¸¥à¹‰à¸²à¸‡à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸«à¸¡à¸²à¸¢à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”</button></div>
+  </section>
+
+  <!-- ============ CALC ============ -->
+  <section class="page" id="calc">
+    <h2 class="sec">à¸ªà¸£à¸¸à¸›à¸«à¸¡à¸§à¸”à¸„à¸³à¸™à¸§à¸“</h2>
+    <p class="sec-note">à¸œà¸¥à¸•à¸­à¸šà¹à¸—à¸™ Â· à¸¡à¸¹à¸¥à¸„à¹ˆà¸²à¹€à¸‡à¸´à¸™à¸•à¸²à¸¡à¹€à¸§à¸¥à¸² Â· à¸„à¸§à¸²à¸¡à¹€à¸ªà¸µà¹ˆà¸¢à¸‡ â€” à¸ˆà¸¸à¸”à¸—à¸µà¹ˆà¸„à¸™à¸žà¸¥à¸²à¸”à¸šà¹ˆà¸­à¸¢à¸—à¸µà¹ˆà¸ªà¸¸à¸” à¹€à¸‚à¹‰à¸²à¹ƒà¸ˆà¸ªà¸¹à¸•à¸£ à¹„à¸¡à¹ˆà¹ƒà¸Šà¹ˆà¸ˆà¸³à¸„à¸³à¸•à¸­à¸š</p>
+
+    <div class="card">
+      <h3 style="margin:0 0 6px">â‘  à¸­à¸±à¸•à¸£à¸²à¸œà¸¥à¸•à¸­à¸šà¹à¸—à¸™</h3>
+      <div class="fml"><b>HPR</b> = [ à¹€à¸‡à¸´à¸™à¹„à¸”à¹‰ (à¸›à¸±à¸™à¸œà¸¥/à¸”à¸­à¸à¹€à¸šà¸µà¹‰à¸¢) + (à¸£à¸²à¸„à¸²à¸›à¸¥à¸²à¸¢ âˆ’ à¸£à¸²à¸„à¸²à¸•à¹‰à¸™) ] Ã· à¸£à¸²à¸„à¸²à¸•à¹‰à¸™</div>
+      <p class="eg"><b>à¹€à¸Šà¹ˆà¸™</b> à¸‹à¸·à¹‰à¸­à¸«à¸¸à¹‰à¸™ 100 à¸›à¸±à¸™à¸œà¸¥ 5 à¸›à¸¥à¸²à¸¢à¸‡à¸§à¸”à¸£à¸²à¸„à¸² 108 â†’ (5 + 8)/100 = <b>13%</b></p>
+      <div class="fml"><b>à¸„à¹ˆà¸²à¹€à¸‰à¸¥à¸µà¹ˆà¸¢à¹€à¸¥à¸‚à¸„à¸“à¸´à¸• (AM)</b> = Î£R Ã· n &nbsp;|&nbsp; <b>à¹€à¸£à¸‚à¸²à¸„à¸“à¸´à¸• (GM)</b> = [(1+Râ‚)(1+Râ‚‚)â€¦]^(1/n) âˆ’ 1</div>
+      <p class="eg">GM à¹ƒà¸Šà¹‰à¸à¸±à¸šà¸œà¸¥à¸•à¸­à¸šà¹à¸—à¸™à¸«à¸¥à¸²à¸¢à¸‡à¸§à¸” (à¸—à¸šà¸•à¹‰à¸™) à¹à¸¥à¸° <b>GM â‰¤ AM à¹€à¸ªà¸¡à¸­</b> à¸¢à¸´à¹ˆà¸‡à¸œà¸±à¸™à¸œà¸§à¸™à¸¡à¸²à¸ à¸¢à¸´à¹ˆà¸‡à¸«à¹ˆà¸²à¸‡à¸à¸±à¸™</p>
+      <div class="fml"><b>E(R) à¸„à¸²à¸”à¸«à¸§à¸±à¸‡</b> = Î£ [ à¸„à¸§à¸²à¸¡à¸™à¹ˆà¸²à¸ˆà¸°à¹€à¸›à¹‡à¸™ Ã— à¸œà¸¥à¸•à¸­à¸šà¹à¸—à¸™à¸à¸£à¸“à¸µà¸™à¸±à¹‰à¸™ ]</div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin:0 0 6px">â‘¡ à¸œà¸¥à¸•à¸­à¸šà¹à¸—à¸™à¸—à¸µà¹ˆà¹à¸—à¹‰à¸ˆà¸£à¸´à¸‡ Â· à¸ à¸²à¸©à¸µ</h3>
+      <div class="fml">(1 + <b>nominal</b>) = (1 + <b>real</b>) Ã— (1 + <b>à¹€à¸‡à¸´à¸™à¹€à¸Ÿà¹‰à¸­</b>) &nbsp;â†’&nbsp; à¹‚à¸”à¸¢à¸›à¸£à¸°à¸¡à¸²à¸“ real â‰ˆ nominal âˆ’ à¹€à¸‡à¸´à¸™à¹€à¸Ÿà¹‰à¸­</div>
+      <div class="fml"><b>à¸œà¸¥à¸•à¸­à¸šà¹à¸—à¸™à¸—à¸µà¹ˆà¸•à¹‰à¸­à¸‡à¸à¸²à¸£</b> = à¸­à¸±à¸•à¸£à¸²à¸›à¸£à¸²à¸¨à¸ˆà¸²à¸à¸„à¸§à¸²à¸¡à¹€à¸ªà¸µà¹ˆà¸¢à¸‡à¹à¸—à¹‰à¸ˆà¸£à¸´à¸‡ + à¸ªà¹ˆà¸§à¸™à¸Šà¸”à¹€à¸Šà¸¢à¹€à¸‡à¸´à¸™à¹€à¸Ÿà¹‰à¸­ + à¸ªà¹ˆà¸§à¸™à¸Šà¸”à¹€à¸Šà¸¢à¸„à¸§à¸²à¸¡à¹€à¸ªà¸µà¹ˆà¸¢à¸‡</div>
+      <div class="fml"><b>à¸«à¸¥à¸±à¸‡à¸ à¸²à¸©à¸µ</b> = à¸œà¸¥à¸•à¸­à¸šà¹à¸—à¸™ Ã— (1 âˆ’ à¸­à¸±à¸•à¸£à¸²à¸ à¸²à¸©à¸µ) &nbsp;|&nbsp; <b>TEY</b> = à¸œà¸¥à¸•à¸­à¸šà¹à¸—à¸™à¸›à¸¥à¸­à¸”à¸ à¸²à¸©à¸µ Ã· (1 âˆ’ à¸­à¸±à¸•à¸£à¸²à¸ à¸²à¸©à¸µ)</div>
+      <p class="eg"><b>TEY</b> à¹ƒà¸Šà¹‰à¹€à¸—à¸µà¸¢à¸šà¸§à¹ˆà¸²à¸•à¸£à¸²à¸ªà¸²à¸£à¸›à¸¥à¸­à¸”à¸ à¸²à¸©à¸µ (à¹€à¸Šà¹ˆà¸™à¸žà¸±à¸™à¸˜à¸šà¸±à¸•à¸£à¸šà¸²à¸‡à¸Šà¸™à¸´à¸”) à¹€à¸—à¸µà¸¢à¸šà¹€à¸—à¹ˆà¸²à¸•à¸£à¸²à¸ªà¸²à¸£à¸—à¸µà¹ˆà¸•à¹‰à¸­à¸‡à¹€à¸ªà¸µà¸¢à¸ à¸²à¸©à¸µà¸à¸µà¹ˆ %</p>
+    </div>
+
+    <div class="card">
+      <h3 style="margin:0 0 6px">â‘¢ à¸¡à¸¹à¸¥à¸„à¹ˆà¸²à¹€à¸‡à¸´à¸™à¸•à¸²à¸¡à¹€à¸§à¸¥à¸² (TVM)</h3>
+      <div class="fml"><b>FV</b> = PV Ã— (1 + r)â¿ &nbsp;&nbsp;|&nbsp;&nbsp; <b>PV</b> = FV Ã· (1 + r)â¿</div>
+      <p class="eg"><b>à¹€à¸Šà¹ˆà¸™</b> à¸à¸²à¸ 1,000 à¸—à¸µà¹ˆ 6% 3 à¸›à¸µ â†’ 1,000Ã—(1.06)Â³ = <b>1,191 à¸šà¸²à¸—</b></p>
+      <div class="fml"><b>à¸­à¸±à¸•à¸£à¸²à¹à¸—à¹‰à¸ˆà¸£à¸´à¸‡ (Effective)</b> = (1 + i/m)^m âˆ’ 1 &nbsp; (m = à¸ˆà¸³à¸™à¸§à¸™à¸‡à¸§à¸”à¸•à¹ˆà¸­à¸›à¸µ)</div>
+      <p class="eg">à¸—à¸šà¸”à¸­à¸à¸–à¸µà¹ˆà¸‚à¸¶à¹‰à¸™ (m à¸¡à¸²à¸à¸‚à¸¶à¹‰à¸™) â†’ effective rate à¸ªà¸¹à¸‡à¸‚à¸¶à¹‰à¸™ à¹€à¸Šà¹ˆà¸™ 12%/à¸›à¸µ à¸—à¸šà¸£à¸²à¸¢à¹€à¸”à¸·à¸­à¸™ â‰ˆ <b>12.68%</b></p>
+    </div>
+
+    <div class="card">
+      <h3 style="margin:0 0 6px">â‘£ à¸„à¸§à¸²à¸¡à¹€à¸ªà¸µà¹ˆà¸¢à¸‡à¸«à¸¥à¸±à¸à¸—à¸£à¸±à¸žà¸¢à¹Œà¸£à¸²à¸¢à¸•à¸±à¸§</h3>
+      <div class="fml"><b>Variance</b> ÏƒÂ² = Î£ [ à¸„à¸§à¸²à¸¡à¸™à¹ˆà¸²à¸ˆà¸°à¹€à¸›à¹‡à¸™ Ã— (R âˆ’ E(R))Â² ] &nbsp;|&nbsp; <b>SD</b> Ïƒ = âˆšVariance</div>
+      <p class="eg">SD (à¸ªà¹ˆà¸§à¸™à¹€à¸šà¸µà¹ˆà¸¢à¸‡à¹€à¸šà¸™à¸¡à¸²à¸•à¸£à¸à¸²à¸™) à¸¢à¸´à¹ˆà¸‡à¸ªà¸¹à¸‡ = à¸„à¸§à¸²à¸¡à¹€à¸ªà¸µà¹ˆà¸¢à¸‡à¸£à¸§à¸¡à¸¢à¸´à¹ˆà¸‡à¸¡à¸²à¸</p>
+    </div>
+
+    <div class="card">
+      <h3 style="margin:0 0 6px">â‘¤ à¸„à¸§à¸²à¸¡à¹€à¸ªà¸µà¹ˆà¸¢à¸‡à¸à¸¥à¸¸à¹ˆà¸¡à¸«à¸¥à¸±à¸à¸—à¸£à¸±à¸žà¸¢à¹Œ (Portfolio)</h3>
+      <div class="fml"><b>à¸œà¸¥à¸•à¸­à¸šà¹à¸—à¸™à¸žà¸­à¸£à¹Œà¸•</b> = wâ‚Râ‚ + wâ‚‚Râ‚‚ + â€¦ (à¸–à¹ˆà¸§à¸‡à¸™à¹‰à¸³à¸«à¸™à¸±à¸à¸•à¸²à¸¡à¸ªà¸±à¸”à¸ªà¹ˆà¸§à¸™à¹€à¸‡à¸´à¸™)</div>
+      <div class="fml"><b>Covariance</b> = Ï Ã— Ïƒ_A Ã— Ïƒ_B &nbsp;|&nbsp; <b>Correlation</b> Ï = Cov Ã· (Ïƒ_A Ïƒ_B) , à¸­à¸¢à¸¹à¹ˆà¸£à¸°à¸«à¸§à¹ˆà¸²à¸‡ <b>âˆ’1 à¸–à¸¶à¸‡ +1</b></div>
+      <div class="fml"><b>SD à¸žà¸­à¸£à¹Œà¸• 2 à¸ªà¸´à¸™à¸—à¸£à¸±à¸žà¸¢à¹Œ</b> = âˆš( wâ‚Â²Ïƒâ‚Â² + wâ‚‚Â²Ïƒâ‚‚Â² + 2wâ‚wâ‚‚Â·Cov )</div>
+      <p class="eg"><b>à¸„à¸µà¸¢à¹Œ:</b> Ï à¸¢à¸´à¹ˆà¸‡à¸•à¹ˆà¸³ (à¹€à¸‚à¹‰à¸²à¹ƒà¸à¸¥à¹‰ âˆ’1) à¸à¸²à¸£à¸à¸£à¸°à¸ˆà¸²à¸¢à¸„à¸§à¸²à¸¡à¹€à¸ªà¸µà¹ˆà¸¢à¸‡à¸¢à¸´à¹ˆà¸‡à¹„à¸”à¹‰à¸œà¸¥ â†’ SD à¸žà¸­à¸£à¹Œà¸•à¸¥à¸”à¸¥à¸‡à¸¡à¸²à¸</p>
+    </div>
+
+    <div class="card">
+      <h3 style="margin:0 0 6px">â‘¥ Beta Â· CAPM Â· à¸§à¸±à¸”à¸œà¸¥à¸‡à¸²à¸™</h3>
+      <div class="fml"><b>Beta</b> Î² = Cov(à¸«à¸¸à¹‰à¸™, à¸•à¸¥à¸²à¸”) Ã· Variance à¸•à¸¥à¸²à¸” &nbsp; (Î²&gt;1 à¸œà¸±à¸™à¸œà¸§à¸™à¸¡à¸²à¸à¸à¸§à¹ˆà¸²à¸•à¸¥à¸²à¸”)</div>
+      <div class="fml"><b>CAPM</b> : E(R) = R_f + Î² ( R_m âˆ’ R_f )</div>
+      <p class="eg"><b>à¹€à¸Šà¹ˆà¸™</b> R_f=2%, Î²=1.2, R_m=10% â†’ 2 + 1.2(10âˆ’2) = <b>11.6%</b></p>
+      <div class="fml"><b>Sharpe</b> = (R_p âˆ’ R_f)/Ïƒ_p Â· <b>Treynor</b> = (R_p âˆ’ R_f)/Î²_p Â· <b>Jensen Î±</b> = R_p âˆ’ [R_f + Î²_p(R_m âˆ’ R_f)]</div>
+      <p class="eg">Sharpe à¹ƒà¸Šà¹‰ Ïƒ (à¸„à¸§à¸²à¸¡à¹€à¸ªà¸µà¹ˆà¸¢à¸‡à¸£à¸§à¸¡) Â· Treynor/Jensen à¹ƒà¸Šà¹‰ Î² (à¸„à¸§à¸²à¸¡à¹€à¸ªà¸µà¹ˆà¸¢à¸‡à¸—à¸µà¹ˆà¹€à¸›à¹‡à¸™à¸£à¸°à¸šà¸š)</p>
+    </div>
+    <div class="hint" style="margin-top:0"><b>à¹€à¸—à¸„à¸™à¸´à¸„à¸«à¹‰à¸­à¸‡à¸ªà¸­à¸š:</b> à¸ˆà¸”à¸ªà¸¹à¸•à¸£à¸žà¸§à¸à¸™à¸µà¹‰à¹ƒà¸™à¸à¸£à¸°à¸”à¸²à¸©à¸—à¸”à¸—à¸±à¸™à¸—à¸µà¸—à¸µà¹ˆà¹€à¸£à¸´à¹ˆà¸¡à¸ªà¸­à¸š (brain dump) à¸à¹ˆà¸­à¸™à¸¥à¸·à¸¡ à¹à¸¥à¹‰à¸§à¸„à¹ˆà¸­à¸¢à¹„à¸¥à¹ˆà¸—à¸³à¹‚à¸ˆà¸—à¸¢à¹Œ</div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="page" id="quiz">
+    <h2 class="sec">à¸Šà¸¸à¸”à¸‚à¹‰à¸­à¸ªà¸­à¸šà¸ˆà¸³à¸¥à¸­à¸‡</h2>
+    <p class="sec-note">15 à¸‚à¹‰à¸­ à¸„à¸£à¸­à¸šà¸„à¸¥à¸¸à¸¡à¹€à¸™à¸·à¹‰à¸­à¸«à¸²à¹ƒà¸«à¸¡à¹ˆ + à¸„à¸³à¸™à¸§à¸“ + à¸ˆà¸£à¸£à¸¢à¸²à¸šà¸£à¸£à¸“ Â· à¹€à¸¥à¸·à¸­à¸à¸„à¸³à¸•à¸­à¸šà¹à¸¥à¹‰à¸§à¸à¸” "à¸•à¸£à¸§à¸ˆà¸„à¸³à¸•à¸­à¸š"</p>
+    <div id="quiz-body"></div>
+    <div style="text-align:center;margin:16px 0"><button class="quizbtn" id="quiz-check" type="button">à¸•à¸£à¸§à¸ˆà¸„à¸³à¸•à¸­à¸š</button></div>
+    <div class="score" id="quiz-score" style="display:none"></div>
+    <div class="reset"><button id="quiz-reset" type="button">à¸—à¸³à¹ƒà¸«à¸¡à¹ˆ</button></div>
+  </section>
+
+  <!-- ============ FLASH ============ -->
+  <section class="page" id="flash">
+    <h2 class="sec">à¹à¸Ÿà¸¥à¸Šà¸à¸²à¸£à¹Œà¸”</h2>
+    <p class="sec-note">à¸„à¸³à¸¨à¸±à¸žà¸—à¹Œ + à¸•à¸±à¸§à¹€à¸¥à¸‚à¸ªà¸³à¸„à¸±à¸ à¹„à¸§à¹‰à¸—à¹ˆà¸­à¸‡à¸à¹ˆà¸­à¸™à¹€à¸‚à¹‰à¸²à¸«à¹‰à¸­à¸‡à¸ªà¸­à¸š Â· à¹à¸•à¸°à¸à¸²à¸£à¹Œà¸”à¹€à¸žà¸·à¹ˆà¸­à¸žà¸¥à¸´à¸</p>
+    <div class="fc-wrap"><div class="fc" id="fc">
+      <div class="fc-face fc-front"><span class="lab">à¸„à¸³à¸–à¸²à¸¡</span><p class="q" id="fc-q"></p><span class="fc-tap">à¹à¸•à¸°à¹€à¸žà¸·à¹ˆà¸­à¸”à¸¹à¸„à¸³à¸•à¸­à¸š</span></div>
+      <div class="fc-face fc-back"><span class="lab">à¸„à¸³à¸•à¸­à¸š</span><p class="a" id="fc-a"></p><span class="fc-tap">à¹à¸•à¸°à¹€à¸žà¸·à¹ˆà¸­à¸à¸¥à¸±à¸š</span></div>
+    </div></div>
+    <div class="fc-nav">
+      <button id="fc-prev" type="button">â€¹ à¸à¹ˆà¸­à¸™à¸«à¸™à¹‰à¸²</button>
+      <span class="fc-count" id="fc-count">1 / 1</span>
+      <button id="fc-next" type="button">à¸–à¸±à¸”à¹„à¸› â€º</button>
+    </div>
+  </section>
+
+  <!-- ============ RESOURCES ============ -->
+  <section class="page" id="res">
+    <h2 class="sec">à¹à¸«à¸¥à¹ˆà¸‡à¹€à¸£à¸µà¸¢à¸™à¸£à¸¹à¹‰à¹à¸•à¹ˆà¸¥à¸°à¸«à¸±à¸§à¸‚à¹‰à¸­</h2>
+    <p class="sec-note">à¸„à¸¥à¸´à¸à¹€à¸‚à¹‰à¸²à¹„à¸›à¸­à¹ˆà¸²à¸™/à¸à¸¶à¸à¸•à¸²à¸¡à¸«à¸±à¸§à¸‚à¹‰à¸­à¸—à¸µà¹ˆà¸•à¹‰à¸­à¸‡à¸à¸²à¸£</p>
+
+    <div class="card">
+      <h3 style="margin:0 0 6px">ðŸ“Œ à¸ªà¸¡à¸±à¸„à¸£à¸ªà¸­à¸š &amp; à¸„à¸¹à¹ˆà¸¡à¸·à¸­à¸«à¸¥à¸±à¸</h3>
+      <div class="res"><div class="ic">ðŸ“</div><div><div class="rt"><a href="https://register.ati-asco.org" target="_blank" rel="noopener">à¸ªà¸¡à¸±à¸„à¸£à¸ªà¸­à¸š IC â€” ATI</a></div><div class="rd">à¹€à¸¥à¸·à¸­à¸à¸§à¸±à¸™/à¸¨à¸¹à¸™à¸¢à¹Œà¸ªà¸­à¸š Â· register.ati-asco.org</div></div></div>
+      <div class="res"><div class="ic">ðŸ“š</div><div><div class="rt"><a href="https://www.set.or.th/th/education-research/education/tsi" target="_blank" rel="noopener">à¸¨à¸¹à¸™à¸¢à¹Œà¹€à¸£à¸µà¸¢à¸™à¸£à¸¹à¹‰ TSI â€” à¸•à¸¥à¸²à¸”à¸«à¸¥à¸±à¸à¸—à¸£à¸±à¸žà¸¢à¹Œà¸¯</a></div><div class="rd">à¸•à¹‰à¸™à¸—à¸²à¸‡à¸„à¸¹à¹ˆà¸¡à¸·à¸­à¸«à¸¥à¸±à¸à¸ªà¸¹à¸•à¸£à¹à¸¥à¸°à¸„à¸§à¸²à¸¡à¸£à¸¹à¹‰à¸•à¸¥à¸²à¸”à¸—à¸¸à¸™</div></div></div>
+      <div class="res"><div class="ic">ðŸ†“</div><div><div class="rt"><a href="https://www.ati-asco.org/testing_news_detail.php?id=167" target="_blank" rel="noopener">à¹à¸šà¸šà¸—à¸”à¸ªà¸­à¸šà¸§à¸±à¸”à¸£à¸°à¸”à¸±à¸šà¸Ÿà¸£à¸µ â€” ATI</a></div><div class="rd">à¸¥à¸­à¸‡à¸§à¸±à¸”à¸£à¸°à¸”à¸±à¸šà¸à¹ˆà¸­à¸™à¸ªà¸­à¸šà¸ˆà¸£à¸´à¸‡</div></div></div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin:0 0 6px">ðŸŒ± à¹€à¸™à¸·à¹‰à¸­à¸«à¸²à¹ƒà¸«à¸¡à¹ˆ v4</h3>
+      <div class="res"><div class="ic">ðŸ’ </div><div><div class="rt"><a href="https://www.setinvestnow.com/th/drx/what-is-drx" target="_blank" rel="noopener">DRx à¸„à¸·à¸­à¸­à¸°à¹„à¸£ â€” SET Invest Now</a></div><div class="rd">à¸­à¸˜à¸´à¸šà¸²à¸¢ Fractional DR à¸„à¸£à¸š Â· à¸•à¸£à¸‡à¸à¸±à¸šà¸—à¸µà¹ˆà¸­à¸­à¸à¸ªà¸­à¸š</div></div></div>
+      <div class="res"><div class="ic">ðŸª™</div><div><div class="rt"><a href="https://www.sec.or.th/digitalasset" target="_blank" rel="noopener">à¸ªà¸´à¸™à¸—à¸£à¸±à¸žà¸¢à¹Œà¸”à¸´à¸ˆà¸´à¸—à¸±à¸¥ â€” à¸.à¸¥.à¸•.</a></div><div class="rd">à¸£à¸²à¸¢à¸Šà¸·à¹ˆà¸­à¸œà¸¹à¹‰à¹„à¸”à¹‰à¹ƒà¸šà¸­à¸™à¸¸à¸à¸²à¸• + à¸„à¸§à¸²à¸¡à¸£à¸¹à¹‰à¸žà¸·à¹‰à¸™à¸à¸²à¸™</div></div></div>
+      <div class="res"><div class="ic">ðŸŒ</div><div><div class="rt"><a href="https://www.setsustainability.com/" target="_blank" rel="noopener">à¸à¸²à¸£à¸¥à¸‡à¸—à¸¸à¸™à¸¢à¸±à¹ˆà¸‡à¸¢à¸·à¸™ / ESG â€” SET</a></div><div class="rd">à¹à¸™à¸§à¸„à¸´à¸” ESG, à¸«à¸¸à¹‰à¸™à¸¢à¸±à¹ˆà¸‡à¸¢à¸·à¸™, SRI Fund</div></div></div>
+      <div class="res"><div class="ic">ðŸ“ˆ</div><div><div class="rt"><a href="https://www.setinvestnow.com/" target="_blank" rel="noopener">SET Invest Now</a></div><div class="rd">à¸„à¸§à¸²à¸¡à¸£à¸¹à¹‰à¸œà¸¥à¸´à¸•à¸ à¸±à¸“à¸‘à¹Œà¸•à¸¥à¸²à¸”à¸—à¸¸à¸™à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸” (à¸«à¸¡à¸§à¸” 3)</div></div></div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin:0 0 6px">ðŸ§® à¸«à¸¡à¸§à¸”à¸„à¸³à¸™à¸§à¸“ &amp; à¸à¸¶à¸à¹‚à¸ˆà¸—à¸¢à¹Œ</h3>
+      <div class="res"><div class="ic">â–¶ï¸</div><div><div class="rt"><a href="https://www.youtube.com/results?search_query=à¸•à¸´à¸§+IC+Plain+P1+à¸„à¸³à¸™à¸§à¸“" target="_blank" rel="noopener">YouTube: à¸•à¸´à¸§ IC Plain P1 (à¸„à¸³à¸™à¸§à¸“)</a></div><div class="rd">à¸”à¸¹à¸„à¸™à¸—à¸³à¹‚à¸ˆà¸—à¸¢à¹Œ à¸œà¸¥à¸•à¸­à¸šà¹à¸—à¸™/à¸„à¸§à¸²à¸¡à¹€à¸ªà¸µà¹ˆà¸¢à¸‡/TVM à¸•à¸²à¸¡à¹„à¸”à¹‰</div></div></div>
+      <div class="res"><div class="ic">ðŸ’¬</div><div><div class="rt"><a href="https://pantip.com/topic/42674934" target="_blank" rel="noopener">Pantip: à¸›à¸£à¸°à¸ªà¸šà¸à¸²à¸£à¸“à¹Œà¸ªà¸­à¸š IC P1â€“P3</a></div><div class="rd">à¸£à¸µà¸§à¸´à¸§à¸ˆà¸£à¸´à¸‡ à¸ˆà¸±à¸šà¸ˆà¸¸à¸”à¸—à¸µà¹ˆà¸‚à¹‰à¸­à¸ªà¸­à¸šà¸Šà¸­à¸šà¸­à¸­à¸</div></div></div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin:0 0 6px">ðŸ“˜ à¹‚à¸™à¹‰à¸•à¸ªà¸£à¸¸à¸›à¸—à¸µà¹ˆà¸—à¸³à¹„à¸§à¹‰à¸à¹ˆà¸­à¸™à¸«à¸™à¹‰à¸²</h3>
+      <div class="res"><div class="ic">âœ¨</div><div><div class="rt"><a href="ic-p1-notes.html">à¸ªà¸£à¸¸à¸›à¹€à¸™à¸·à¹‰à¸­à¸«à¸²à¹ƒà¸«à¸¡à¹ˆ P1 v4 (à¸‰à¸šà¸±à¸šà¹€à¸•à¹‡à¸¡)</a></div><div class="rd">à¹€à¸ˆà¸²à¸° DRx / ESG / à¸ªà¸´à¸™à¸—à¸£à¸±à¸žà¸¢à¹Œà¸”à¸´à¸ˆà¸´à¸—à¸±à¸¥ / à¸à¸¥à¹„à¸à¸‹à¸·à¹‰à¸­à¸‚à¸²à¸¢ à¸¥à¸°à¹€à¸­à¸µà¸¢à¸”à¸à¸§à¹ˆà¸²à¸™à¸µà¹‰</div></div></div>
+    </div>
+  </section>
+
+  <p class="foot">à¸ªà¸£à¸¸à¸›à¸ˆà¸²à¸à¸„à¸¹à¹ˆà¸¡à¸·à¸­ manual_P1_version4 + update_P1_final à¸‚à¸­à¸‡à¸„à¸¸à¸“ Â· à¸‚à¹‰à¸­à¸ªà¸­à¸šà¸ˆà¸³à¸¥à¸­à¸‡à¹€à¸›à¹‡à¸™à¹à¸™à¸§à¸à¸¶à¸à¸¡à¸·à¸­ à¹„à¸¡à¹ˆà¹ƒà¸Šà¹ˆà¸‚à¹‰à¸­à¸ªà¸­à¸šà¸ˆà¸£à¸´à¸‡</p>
+</div>
+
+<script>
+/* ---------- NAV ---------- */
+var nav=document.getElementById('nav');
+nav.addEventListener('click',function(e){
+  var b=e.target.closest('button'); if(!b)return;
+  [].forEach.call(nav.children,function(x){x.classList.remove('active');});
+  b.classList.add('active');
+  [].forEach.call(document.querySelectorAll('.page'),function(p){p.classList.remove('on');});
+  document.getElementById(b.dataset.t==='home'?'home':b.dataset.t).classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+
+/* ---------- CHECKLIST ---------- */
+var CK=[
+  {p:'1',t:'à¸•à¸±à¹‰à¸‡à¸•à¹‰à¸™ Â· à¸ˆà¸­à¸‡à¸à¹ˆà¸­à¸™à¸¡à¸µà¹à¸£à¸‡à¸­à¹ˆà¸²à¸™',items:[
+    {id:'c1',x:'à¸ˆà¸­à¸‡à¸§à¸±à¸™à¸ªà¸­à¸š + à¸ˆà¹ˆà¸²à¸¢à¸„à¹ˆà¸²à¸ªà¸­à¸š',d:'register.ati-asco.org â€” à¸•à¸±à¹‰à¸‡à¹€à¸”à¸”à¹„à¸¥à¸™à¹Œà¸à¸±à¸™à¸œà¸±à¸”'},
+    {id:'c2',x:'à¸¡à¸µà¸„à¸¹à¹ˆà¸¡à¸·à¸­ P1 v4 à¸„à¸£à¸š (à¸„à¸¸à¸“à¸¡à¸µà¹à¸¥à¹‰à¸§ âœ“)',d:'à¸•à¹‰à¸™à¸‰à¸šà¸±à¸šà¸‚à¹‰à¸­à¸ªà¸­à¸š'},
+    {id:'c3',x:'à¹‚à¸«à¸¥à¸”à¹à¸šà¸šà¸—à¸”à¸ªà¸­à¸šà¸Ÿà¸£à¸µ ATI à¹„à¸§à¹‰à¸‹à¹‰à¸­à¸¡',d:''},
+  ]},
+  {p:'2',t:'à¸­à¹ˆà¸²à¸™ Â· à¸—à¸µà¸¥à¸°à¸«à¸¡à¸§à¸”',items:[
+    {id:'c4',x:'à¸«à¸¡à¸§à¸” 3 â€” à¸œà¸¥à¸´à¸•à¸ à¸±à¸“à¸‘à¹Œ (à¸«à¸¸à¹‰à¸™/à¸•à¸£à¸²à¸ªà¸²à¸£à¸«à¸™à¸µà¹‰/à¸à¸­à¸‡à¸—à¸¸à¸™) 50 à¸‚à¹‰à¸­',d:'à¸‚à¹‰à¸­à¹€à¸¢à¸­à¸°à¸ªà¸¸à¸” à¹€à¸à¹‡à¸šà¸à¹ˆà¸­à¸™'},
+    {id:'c5',x:'à¸«à¸¡à¸§à¸” 1 â€” à¸žà¸·à¹‰à¸™à¸à¸²à¸™ + à¸­à¹ˆà¸²à¸™à¹€à¸™à¸·à¹‰à¸­à¸«à¸²à¹ƒà¸«à¸¡à¹ˆ v4',d:'à¸”à¸´à¸ˆà¸´à¸—à¸±à¸¥/ESG/LiVEx/DRx'},
+    {id:'c6',x:'à¸«à¸¡à¸§à¸”à¸„à¸³à¸™à¸§à¸“ â€” à¸œà¸¥à¸•à¸­à¸šà¹à¸—à¸™/à¸„à¸§à¸²à¸¡à¹€à¸ªà¸µà¹ˆà¸¢à¸‡/TVM',d:'à¸”à¸¹à¹à¸—à¹‡à¸š "à¸ªà¸¹à¸•à¸£à¸„à¸³à¸™à¸§à¸“" + à¸à¸¶à¸à¹‚à¸ˆà¸—à¸¢à¹Œ'},
+    {id:'c7',x:'à¸«à¸¡à¸§à¸” 2 â€” à¸à¸Ž + à¸ˆà¸£à¸£à¸¢à¸²à¸šà¸£à¸£à¸“ (à¸•à¹‰à¸­à¸‡à¸œà¹ˆà¸²à¸™ 70% à¹à¸¢à¸!)',d:'à¸«à¹‰à¸²à¸¡à¸—à¸´à¹‰à¸‡ à¸—à¹ˆà¸­à¸‡à¹ƒà¸«à¹‰à¹à¸¡à¹ˆà¸™'},
+  ]},
+  {p:'3',t:'à¸‹à¹‰à¸­à¸¡ Â· à¹à¸¥à¹‰à¸§à¸¥à¸¸à¸¢à¸ªà¸­à¸š',items:[
+    {id:'c8',x:'à¸—à¸³à¸Šà¸¸à¸”à¸‚à¹‰à¸­à¸ªà¸­à¸šà¸ˆà¸³à¸¥à¸­à¸‡ (à¹à¸—à¹‡à¸š "à¸Šà¸¸à¸”à¸‚à¹‰à¸­à¸ªà¸­à¸š")',d:''},
+    {id:'c9',x:'à¸—à¹ˆà¸­à¸‡à¹à¸Ÿà¸¥à¸Šà¸à¸²à¸£à¹Œà¸”à¸„à¸³à¸¨à¸±à¸žà¸—à¹Œ+à¸•à¸±à¸§à¹€à¸¥à¸‚',d:''},
+    {id:'c10',x:'à¸•à¸°à¸¥à¸¸à¸¢à¹‚à¸ˆà¸—à¸¢à¹Œ 2 à¸£à¸­à¸š + mock à¹ƒà¸«à¹‰à¹„à¸”à¹‰ 80%+',d:''},
+    {id:'c11',x:'à¹€à¸‚à¹‰à¸²à¸ªà¸­à¸šà¸—à¸µà¹ˆà¸¨à¸¹à¸™à¸¢à¹Œ ATI ðŸŽ‰',d:'à¸£à¸¹à¹‰à¸œà¸¥à¸—à¸±à¸™à¸—à¸µ à¹„à¸¡à¹ˆà¸œà¹ˆà¸²à¸™à¸ªà¸­à¸šà¹ƒà¸«à¸¡à¹ˆà¹„à¸”à¹‰'},
+  ]},
+];
+(function(){
+  var host=document.getElementById('checklist'),html='';
+  CK.forEach(function(ph){
+    html+='<div class="phase-head"><span class="phase-num">'+ph.p+'</span><h3>'+ph.t+'</h3></div>';
+    ph.items.forEach(function(it){
+      html+='<label class="item"><input type="checkbox" data-ck="'+it.id+'"><span class="box"><svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg></span><span class="it-body"><span class="it-title">'+it.x+'</span>'+(it.d?'<span class="it-desc">'+it.d+'</span>':'')+'</span></label>';
+    });
+  });
+  host.innerHTML=html;
+  var boxes=[].slice.call(host.querySelectorAll('input')),KEY='p1hub-ck';
+  function save(){var s={};boxes.forEach(function(b){if(b.checked)s[b.dataset.ck]=1;});localStorage.setItem(KEY,JSON.stringify(s));}
+  function render(){var d=boxes.filter(function(b){return b.checked;}).length;
+    document.getElementById('ck-count').textContent=d+'/'+boxes.length;
+    document.getElementById('ck-fill').style.width=Math.round(d/boxes.length*100)+'%';}
+  try{var sv=JSON.parse(localStorage.getItem(KEY))||{};boxes.forEach(function(b){if(sv[b.dataset.ck])b.checked=true;});}catch(e){}
+  boxes.forEach(function(b){b.addEventListener('change',function(){save();render();});});
+  document.getElementById('ck-reset').addEventListener('click',function(){boxes.forEach(function(b){b.checked=false;});save();render();});
+  render();
+})();
+
+/* ---------- QUIZ ---------- */
+var QUIZ=[
+ {q:'à¸ªà¸´à¸™à¸—à¸£à¸±à¸žà¸¢à¹Œà¸”à¸´à¸ˆà¸´à¸—à¸±à¸¥à¹ƒà¸™à¹„à¸—à¸¢à¸¡à¸µà¸à¸µà¹ˆà¸Šà¹ˆà¸­à¸‡à¸—à¸²à¸‡à¸à¸²à¸£à¸‹à¸·à¹‰à¸­à¸‚à¸²à¸¢à¸—à¸µà¹ˆà¸•à¹‰à¸­à¸‡à¹„à¸”à¹‰à¸£à¸±à¸šà¹ƒà¸šà¸­à¸™à¸¸à¸à¸²à¸• à¸.à¸¥.à¸•.?',o:['2 à¸Šà¹ˆà¸­à¸‡à¸—à¸²à¸‡','3 à¸Šà¹ˆà¸­à¸‡à¸—à¸²à¸‡','4 à¸Šà¹ˆà¸­à¸‡à¸—à¸²à¸‡','5 à¸Šà¹ˆà¸­à¸‡à¸—à¸²à¸‡'],a:1,e:'3 à¸Šà¹ˆà¸­à¸‡à¸—à¸²à¸‡: à¸¨à¸¹à¸™à¸¢à¹Œà¸‹à¸·à¹‰à¸­à¸‚à¸²à¸¢ (exchange), à¸™à¸²à¸¢à¸«à¸™à¹‰à¸² (broker), à¹à¸¥à¸°à¸œà¸¹à¹‰à¸„à¹‰à¸² (dealer)'},
+ {q:'à¸œà¸¹à¹‰à¸„à¹‰à¸²à¸ªà¸´à¸™à¸—à¸£à¸±à¸žà¸¢à¹Œà¸”à¸´à¸ˆà¸´à¸—à¸±à¸¥ (dealer) à¸¡à¸µà¸¥à¸±à¸à¸©à¸“à¸°à¹€à¸”à¹ˆà¸™à¸„à¸·à¸­à¸‚à¹‰à¸­à¹ƒà¸”?',o:['à¸ˆà¸±à¸šà¸„à¸¹à¹ˆà¸„à¸³à¸ªà¸±à¹ˆà¸‡à¸‹à¸·à¹‰à¸­à¸‚à¸²à¸¢à¸£à¸°à¸«à¸§à¹ˆà¸²à¸‡à¸œà¸¹à¹‰à¸¥à¸‡à¸—à¸¸à¸™','à¸ªà¹ˆà¸‡à¸„à¸³à¸ªà¸±à¹ˆà¸‡à¹„à¸›à¸ˆà¸±à¸šà¸„à¸¹à¹ˆà¹ƒà¸«à¹‰à¸¥à¸¹à¸à¸„à¹‰à¸²','à¸‹à¸·à¹‰à¸­à¸‚à¸²à¸¢à¸à¸±à¸šà¸¥à¸¹à¸à¸„à¹‰à¸²à¹ƒà¸™à¸™à¸²à¸¡à¸‚à¸­à¸‡à¸•à¸™à¹€à¸­à¸‡à¹€à¸›à¹‡à¸™à¸à¸²à¸£à¸„à¹‰à¸²à¸›à¸à¸•à¸´','à¹ƒà¸«à¹‰à¸„à¸³à¹à¸™à¸°à¸™à¸³à¸à¸²à¸£à¸¥à¸‡à¸—à¸¸à¸™à¹€à¸—à¹ˆà¸²à¸™à¸±à¹‰à¸™'],a:2,e:'dealer à¹€à¸‚à¹‰à¸²à¸‹à¸·à¹‰à¸­/à¸‚à¸²à¸¢à¸à¸±à¸šà¸¥à¸¹à¸à¸„à¹‰à¸²à¹ƒà¸™à¸™à¸²à¸¡à¸•à¸™à¹€à¸­à¸‡ à¸•à¹ˆà¸²à¸‡à¸ˆà¸²à¸ exchange (à¸ˆà¸±à¸šà¸„à¸¹à¹ˆ) à¹à¸¥à¸° broker (à¸ªà¹ˆà¸‡à¸„à¸³à¸ªà¸±à¹ˆà¸‡à¹„à¸›à¹ƒà¸«à¹‰)'},
+ {q:'à¸„à¸§à¸²à¸¡à¹€à¸ªà¸µà¹ˆà¸¢à¸‡à¸‚à¹‰à¸­à¹ƒà¸”à¸‚à¸­à¸‡à¸ªà¸´à¸™à¸—à¸£à¸±à¸žà¸¢à¹Œà¸”à¸´à¸ˆà¸´à¸—à¸±à¸¥ à¸—à¸µà¹ˆà¸—à¸³à¹ƒà¸«à¹‰à¹€à¸‚à¹‰à¸²à¸–à¸¶à¸‡/à¹‚à¸­à¸™à¸ªà¸´à¸™à¸—à¸£à¸±à¸žà¸¢à¹Œà¹„à¸¡à¹ˆà¹„à¸”à¹‰à¸­à¸µà¸à¹€à¸¥à¸¢à¸«à¸²à¸à¹€à¸à¸´à¸”à¸‚à¸¶à¹‰à¸™?',o:['à¸„à¸§à¸²à¸¡à¸œà¸±à¸™à¸œà¸§à¸™à¸‚à¸­à¸‡à¸£à¸²à¸„à¸²','à¸ à¸±à¸¢à¹„à¸‹à¹€à¸šà¸­à¸£à¹Œ','à¸à¸²à¸£à¸—à¸³ Private Key à¸ªà¸¹à¸à¸«à¸²à¸¢','à¸–à¸¹à¸à¸¡à¸´à¸ˆà¸‰à¸²à¸Šà¸µà¸žà¸«à¸¥à¸­à¸'],a:2,e:'Private Key à¸„à¸·à¸­à¸£à¸«à¸±à¸ªà¸ªà¹ˆà¸§à¸™à¸•à¸±à¸§à¸—à¸µà¹ˆà¹ƒà¸Šà¹‰à¹€à¸‚à¹‰à¸²à¸–à¸¶à¸‡/à¹‚à¸­à¸™à¸ªà¸´à¸™à¸—à¸£à¸±à¸žà¸¢à¹Œ à¸–à¹‰à¸²à¸«à¸²à¸¢à¹à¸¥à¹‰à¸§à¸ˆà¸°à¹€à¸‚à¹‰à¸²à¸–à¸¶à¸‡à¹„à¸¡à¹ˆà¹„à¸”à¹‰à¸­à¸µà¸'},
+ {q:'DRx à¹ƒà¸Šà¹‰à¸à¸¥à¹„à¸à¸„à¸§à¸šà¸„à¸¸à¸¡à¸à¸²à¸£à¹€à¸„à¸¥à¸·à¹ˆà¸­à¸™à¹„à¸«à¸§à¸£à¸²à¸„à¸²à¹à¸šà¸šà¹ƒà¸”?',o:['Ceiling & Floor Â±30%','Dynamic Price Band Â±10% à¸‚à¸­à¸‡à¸£à¸²à¸„à¸²à¹€à¸‰à¸¥à¸µà¹ˆà¸¢ 5 à¸™à¸²à¸—à¸µà¸à¹ˆà¸­à¸™à¸«à¸™à¹‰à¸²','Circuit Breaker','à¹„à¸¡à¹ˆà¸¡à¸µà¸à¸²à¸£à¸„à¸§à¸šà¸„à¸¸à¸¡à¸£à¸²à¸„à¸²'],a:1,e:'DR à¹ƒà¸Šà¹‰ Ceiling/Floor Â±30% à¹à¸•à¹ˆ DRx à¹ƒà¸Šà¹‰ Dynamic Price Band Â±10% à¸‚à¸­à¸‡à¸£à¸²à¸„à¸²à¹€à¸‰à¸¥à¸µà¹ˆà¸¢ 5 à¸™à¸²à¸—à¸µà¸à¹ˆà¸­à¸™à¸«à¸™à¹‰à¸²'},
+ {q:'à¸‚à¸™à¸²à¸”à¸à¸²à¸£à¸‹à¸·à¹‰à¸­à¸‚à¸²à¸¢à¸‚à¸±à¹‰à¸™à¸•à¹ˆà¸³à¸‚à¸­à¸‡ DRx à¸„à¸·à¸­à¹€à¸—à¹ˆà¸²à¹ƒà¸”?',o:['1 à¸«à¸™à¹ˆà¸§à¸¢','0.01 à¸«à¸™à¹ˆà¸§à¸¢','0.0001 à¸«à¸™à¹ˆà¸§à¸¢','100 à¸«à¸™à¹ˆà¸§à¸¢'],a:2,e:'DRx à¸‹à¸·à¹‰à¸­à¹€à¸›à¹‡à¸™à¹€à¸¨à¸©à¸«à¸™à¹ˆà¸§à¸¢à¹„à¸”à¹‰ à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™à¹€à¸žà¸µà¸¢à¸‡ 0.0001 à¸«à¸™à¹ˆà¸§à¸¢ (à¸•à¹ˆà¸²à¸‡à¸ˆà¸²à¸ DR à¸—à¸µà¹ˆà¸‚à¸±à¹‰à¸™à¸•à¹ˆà¸³ 1 à¸«à¸™à¹ˆà¸§à¸¢)'},
+ {q:'à¸•à¸¥à¸²à¸” LiVEx à¸ˆà¸±à¸”à¸•à¸±à¹‰à¸‡à¸‚à¸¶à¹‰à¸™à¹€à¸žà¸·à¹ˆà¸­à¸£à¸­à¸‡à¸£à¸±à¸šà¸à¸´à¸ˆà¸à¸²à¸£à¸›à¸£à¸°à¹€à¸ à¸—à¹ƒà¸”?',o:['à¸šà¸£à¸´à¸©à¸±à¸—à¸‚à¸™à¸²à¸”à¹ƒà¸«à¸à¹ˆà¸—à¸¸à¸™à¸Šà¸³à¸£à¸° &gt;300 à¸¥à¹‰à¸²à¸™','à¸˜à¸¸à¸£à¸à¸´à¸ˆà¸‚à¸™à¸²à¸”à¸à¸¥à¸²à¸‡-à¹€à¸¥à¹‡à¸','SME à¹à¸¥à¸° Startup','à¸à¸­à¸‡à¸—à¸¸à¸™à¸£à¸§à¸¡à¹€à¸—à¹ˆà¸²à¸™à¸±à¹‰à¸™'],a:2,e:'LiVEx à¹€à¸›à¹‡à¸™à¸¨à¸¹à¸™à¸¢à¹Œà¸‹à¸·à¹‰à¸­à¸‚à¸²à¸¢à¸«à¸¸à¹‰à¸™à¸‚à¸­à¸‡ SME à¹à¸¥à¸° Startup à¸‹à¸·à¹‰à¸­à¸‚à¸²à¸¢à¹à¸šà¸š Auction à¸§à¸±à¸™à¸¥à¸° 1 à¸£à¸­à¸š'},
+ {q:'à¸•à¸£à¸²à¸ªà¸²à¸£à¸«à¸™à¸µà¹‰ ESG à¸›à¸£à¸°à¹€à¸ à¸—à¹ƒà¸”à¸—à¸µà¹ˆ "à¸­à¸±à¸•à¸£à¸²à¸”à¸­à¸à¹€à¸šà¸µà¹‰à¸¢à¸œà¸¹à¸à¸à¸±à¸šà¸œà¸¥à¸à¸²à¸£à¸›à¸£à¸°à¹€à¸¡à¸´à¸™à¸•à¸±à¸§à¸Šà¸µà¹‰à¸§à¸±à¸”à¸”à¹‰à¸²à¸™à¸„à¸§à¸²à¸¡à¸¢à¸±à¹ˆà¸‡à¸¢à¸·à¸™"?',o:['Green Bond','Social Bond','Sustainability Bond','Sustainability-linked Bond'],a:3,e:'Sustainability-linked Bond à¸¡à¸µà¸”à¸­à¸à¹€à¸šà¸µà¹‰à¸¢à¹€à¸žà¸´à¹ˆà¸¡/à¸¥à¸”à¸•à¸²à¸¡à¸œà¸¥à¸‚à¸­à¸‡ Sustainability Performance Targets'},
+ {q:'à¹à¸™à¸§à¸—à¸²à¸‡à¸à¸²à¸£à¸¥à¸‡à¸—à¸¸à¸™à¸¢à¸±à¹ˆà¸‡à¸¢à¸·à¸™à¹à¸šà¸š "ESG Screening" à¸«à¸¡à¸²à¸¢à¸–à¸¶à¸‡à¸‚à¹‰à¸­à¹ƒà¸”?',o:['à¸„à¸±à¸”à¸à¸£à¸­à¸‡à¸«à¸¸à¹‰à¸™à¹€à¸‚à¹‰à¸²/à¸­à¸­à¸à¸•à¸²à¸¡à¹€à¸à¸“à¸‘à¹Œ ESG','à¸œà¸ªà¸²à¸™ ESG à¹€à¸‚à¹‰à¸²à¸à¸±à¸šà¸à¸²à¸£à¸§à¸´à¹€à¸„à¸£à¸²à¸°à¸«à¹Œà¸¡à¸¹à¸¥à¸„à¹ˆà¸²','à¸¥à¸‡à¸—à¸¸à¸™à¸•à¸²à¸¡à¸˜à¸µà¸¡à¹€à¸‰à¸žà¸²à¸°','à¸¡à¸¸à¹ˆà¸‡à¸ªà¸£à¹‰à¸²à¸‡à¸œà¸¥à¸à¸£à¸°à¸—à¸šà¹€à¸Šà¸´à¸‡à¸šà¸§à¸à¸—à¸µà¹ˆà¸§à¸±à¸”à¹„à¸”à¹‰'],a:0,e:'Screening = à¸„à¸±à¸”à¸à¸£à¸­à¸‡ Â· Integration = à¸œà¸ªà¸²à¸™à¸§à¸´à¹€à¸„à¸£à¸²à¸°à¸«à¹Œ Â· Thematic = à¸•à¸²à¸¡à¸˜à¸µà¸¡ Â· Impact = à¸¡à¸¸à¹ˆà¸‡à¸œà¸¥à¸à¸£à¸°à¸—à¸š'},
+ {q:'à¹ƒà¸™à¸„à¸¹à¹ˆà¸¡à¸·à¸­ v4 à¹„à¸”à¹‰à¸¢à¸¸à¸šà¸£à¸§à¸¡ LOS à¹€à¸”à¸´à¸¡ (NVDR, DR, TSR) à¹„à¸›à¹€à¸›à¹‡à¸™ LOS à¹ƒà¸”?',o:['LOS 3.9','LOS 3.10 (à¸›à¸£à¸±à¸šà¸›à¸£à¸¸à¸‡à¹ƒà¸«à¸¡à¹ˆ)','LOS 3.12','à¸¢à¸à¹€à¸¥à¸´à¸à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”'],a:1,e:'à¸¢à¸¸à¸šà¸£à¸§à¸¡à¹€à¸›à¹‡à¸™ LOS 3.10 "à¸•à¸£à¸²à¸ªà¸²à¸£à¸—à¸µà¹ˆà¹€à¸à¸µà¹ˆà¸¢à¸§à¹€à¸™à¸·à¹ˆà¸­à¸‡à¸à¸±à¸šà¸•à¸£à¸²à¸ªà¸²à¸£à¸—à¸¸à¸™à¸›à¸£à¸°à¹€à¸ à¸—à¸­à¸·à¹ˆà¸™ à¹†" à¹€à¸žà¸£à¸²à¸°à¸§à¸±à¸”à¸„à¸§à¸²à¸¡à¸£à¸¹à¹‰à¸£à¸¹à¸›à¹à¸šà¸šà¹€à¸”à¸µà¸¢à¸§à¸à¸±à¸™'},
+ {q:'à¸«à¸¸à¹‰à¸™ A à¸¡à¸µà¸›à¸±à¸™à¸œà¸¥ 4 à¸šà¸²à¸— à¸‹à¸·à¹‰à¸­à¸—à¸µà¹ˆ 100 à¸›à¸¥à¸²à¸¢à¸‡à¸§à¸”à¸£à¸²à¸„à¸² 110 à¸­à¸±à¸•à¸£à¸²à¸œà¸¥à¸•à¸­à¸šà¹à¸—à¸™ (HPR) à¹€à¸—à¹ˆà¸²à¸à¸±à¸š?',o:['10%','14%','4%','11%'],a:1,e:'HPR = (4 + (110âˆ’100))/100 = 14/100 = 14%'},
+ {q:'à¸à¸²à¸à¹€à¸‡à¸´à¸™ 1,000 à¸šà¸²à¸— à¸­à¸±à¸•à¸£à¸² 5% à¸•à¹ˆà¸­à¸›à¸µ à¸—à¸šà¸•à¹‰à¸™ 2 à¸›à¸µ à¸ˆà¸°à¹„à¸”à¹‰à¹€à¸—à¹ˆà¸²à¹ƒà¸” (FV)?',o:['1,100','1,102.50','1,050','1,105'],a:1,e:'FV = 1,000Ã—(1.05)Â² = 1,000Ã—1.1025 = 1,102.50 à¸šà¸²à¸—'},
+ {q:'à¸„à¹ˆà¸²à¸ªà¸±à¸¡à¸›à¸£à¸°à¸ªà¸´à¸—à¸˜à¸´à¹Œà¸ªà¸«à¸ªà¸±à¸¡à¸žà¸±à¸™à¸˜à¹Œ (Correlation, Ï) à¸¡à¸µà¸„à¹ˆà¸²à¸­à¸¢à¸¹à¹ˆà¹ƒà¸™à¸Šà¹ˆà¸§à¸‡à¹ƒà¸”?',o:['0 à¸–à¸¶à¸‡ 1','âˆ’1 à¸–à¸¶à¸‡ +1','âˆ’âˆž à¸–à¸¶à¸‡ +âˆž','0 à¸–à¸¶à¸‡ 100'],a:1,e:'Ï à¸­à¸¢à¸¹à¹ˆà¸£à¸°à¸«à¸§à¹ˆà¸²à¸‡ âˆ’1 à¸–à¸¶à¸‡ +1 Â· à¸¢à¸´à¹ˆà¸‡à¹€à¸‚à¹‰à¸²à¹ƒà¸à¸¥à¹‰ âˆ’1 à¸à¸²à¸£à¸à¸£à¸°à¸ˆà¸²à¸¢à¸„à¸§à¸²à¸¡à¹€à¸ªà¸µà¹ˆà¸¢à¸‡à¸¢à¸´à¹ˆà¸‡à¹„à¸”à¹‰à¸œà¸¥'},
+ {q:'à¸•à¸²à¸¡ CAPM à¸–à¹‰à¸² Rf=3%, Î²=1.5, Rm=11% à¸œà¸¥à¸•à¸­à¸šà¹à¸—à¸™à¸—à¸µà¹ˆà¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¹€à¸—à¹ˆà¸²à¸à¸±à¸š?',o:['12%','15%','14%','11%'],a:1,e:'E(R)=Rf+Î²(Rmâˆ’Rf)=3+1.5(11âˆ’3)=3+12=15%'},
+ {q:'à¸•à¸±à¸§à¸Šà¸µà¹‰à¸§à¸±à¸”à¸œà¸¥à¸‡à¸²à¸™à¸žà¸­à¸£à¹Œà¸•à¸‚à¹‰à¸­à¹ƒà¸”à¹ƒà¸Šà¹‰ "à¸„à¸§à¸²à¸¡à¹€à¸ªà¸µà¹ˆà¸¢à¸‡à¸£à¸§à¸¡ (SD)" à¹€à¸›à¹‡à¸™à¸•à¸±à¸§à¸«à¸²à¸£?',o:['Treynor Ratio','Jensen Alpha','Sharpe Ratio','Beta'],a:2,e:'Sharpe à¹ƒà¸Šà¹‰ Ïƒ (à¸„à¸§à¸²à¸¡à¹€à¸ªà¸µà¹ˆà¸¢à¸‡à¸£à¸§à¸¡) Â· Treynor à¹à¸¥à¸° Jensen à¹ƒà¸Šà¹‰ Î² (à¸„à¸§à¸²à¸¡à¹€à¸ªà¸µà¹ˆà¸¢à¸‡à¸—à¸µà¹ˆà¹€à¸›à¹‡à¸™à¸£à¸°à¸šà¸š)'},
+ {q:'à¸œà¸¹à¹‰à¹à¸™à¸°à¸™à¸³à¸à¸²à¸£à¸¥à¸‡à¸—à¸¸à¸™à¸žà¸šà¸§à¹ˆà¸²à¸„à¸³à¹à¸™à¸°à¸™à¸³à¸‚à¸±à¸”à¸œà¸¥à¸›à¸£à¸°à¹‚à¸¢à¸Šà¸™à¹Œà¸•à¸™à¹€à¸­à¸‡à¸à¸±à¸šà¸¥à¸¹à¸à¸„à¹‰à¸² à¸„à¸§à¸£à¸—à¸³à¸­à¸¢à¹ˆà¸²à¸‡à¹„à¸£à¸•à¸²à¸¡à¸«à¸¥à¸±à¸à¸ˆà¸£à¸£à¸¢à¸²à¸šà¸£à¸£à¸“?',o:['à¹€à¸¥à¸·à¸­à¸à¸ªà¸´à¹ˆà¸‡à¸—à¸µà¹ˆà¸šà¸£à¸´à¸©à¸±à¸—à¹„à¸”à¹‰à¸à¸³à¹„à¸£à¸ªà¸¹à¸‡à¸ªà¸¸à¸”','à¸„à¸³à¸™à¸¶à¸‡à¸–à¸¶à¸‡à¸›à¸£à¸°à¹‚à¸¢à¸Šà¸™à¹Œà¸‚à¸­à¸‡à¸¥à¸¹à¸à¸„à¹‰à¸²à¹€à¸›à¹‡à¸™à¸ªà¸³à¸„à¸±à¸ à¹à¸¥à¸°à¹€à¸›à¸´à¸”à¹€à¸œà¸¢à¸„à¸§à¸²à¸¡à¸‚à¸±à¸”à¹à¸¢à¹‰à¸‡','à¹„à¸¡à¹ˆà¸•à¹‰à¸­à¸‡à¹à¸ˆà¹‰à¸‡à¸¥à¸¹à¸à¸„à¹‰à¸²','à¹à¸™à¸°à¸™à¸³à¸œà¸¥à¸´à¸•à¸ à¸±à¸“à¸‘à¹Œà¸—à¸µà¹ˆà¹„à¸”à¹‰à¸„à¸­à¸¡à¸¡à¸´à¸Šà¸Šà¸±à¹ˆà¸™à¸ªà¸¹à¸‡à¸ªà¸¸à¸”'],a:1,e:'à¸•à¹‰à¸­à¸‡à¸›à¸à¸´à¸šà¸±à¸•à¸´à¸•à¹ˆà¸­à¸¥à¸¹à¸à¸„à¹‰à¸²à¸­à¸¢à¹ˆà¸²à¸‡à¹€à¸›à¹‡à¸™à¸˜à¸£à¸£à¸¡ à¸„à¸³à¸™à¸¶à¸‡à¸–à¸¶à¸‡à¸›à¸£à¸°à¹‚à¸¢à¸Šà¸™à¹Œà¸¥à¸¹à¸à¸„à¹‰à¸²à¹€à¸›à¹‡à¸™à¸ªà¸³à¸„à¸±à¸ à¹à¸¥à¸°à¸›à¹‰à¸­à¸‡à¸à¸±à¸™/à¹€à¸›à¸´à¸”à¹€à¸œà¸¢à¸„à¸§à¸²à¸¡à¸‚à¸±à¸”à¹à¸¢à¹‰à¸‡à¸—à¸²à¸‡à¸œà¸¥à¸›à¸£à¸°à¹‚à¸¢à¸Šà¸™à¹Œ'},
+];
+(function(){
+  var host=document.getElementById('quiz-body'),html='';
+  QUIZ.forEach(function(q,i){
+    html+='<div class="card q" data-qi="'+i+'"><div class="stem"><span class="qn">à¸‚à¹‰à¸­ '+(i+1)+'.</span> '+q.q+'</div>';
+    q.o.forEach(function(op,j){
+      html+='<label class="opt"><input type="radio" name="q'+i+'" value="'+j+'">'+op+'</label>';
+    });
+    html+='<div class="expl"><b>à¹€à¸‰à¸¥à¸¢:</b> '+q.e+'</div></div>';
+  });
+  host.innerHTML=html;
+  host.addEventListener('change',function(e){
+    if(e.target.type!=='radio')return;
+    var card=e.target.closest('.q');
+    [].forEach.call(card.querySelectorAll('.opt'),function(o){o.classList.remove('sel');});
+    e.target.closest('.opt').classList.add('sel');
+  });
+  document.getElementById('quiz-check').addEventListener('click',function(){
+    var correct=0;
+    QUIZ.forEach(function(q,i){
+      var card=host.querySelector('[data-qi="'+i+'"]');
+      var opts=card.querySelectorAll('.opt');
+      var chosen=card.querySelector('input:checked');
+      opts[q.a].classList.add('correct');
+      if(chosen){
+        var ci=+chosen.value;
+        if(ci===q.a)correct++; else opts[ci].classList.add('wrong');
+      }
+      card.querySelector('.expl').classList.add('show');
+    });
+    var sc=document.getElementById('quiz-score');
+    var pct=Math.round(correct/QUIZ.length*100);
+    var msg=pct>=80?'ðŸ† à¹€à¸¢à¸µà¹ˆà¸¢à¸¡! à¸£à¸°à¸”à¸±à¸šà¸žà¸£à¹‰à¸­à¸¡à¸ªà¸­à¸š':pct>=70?'âœ… à¸œà¹ˆà¸²à¸™à¹€à¸à¸“à¸‘à¹Œà¹à¸¥à¹‰à¸§ à¸­à¹ˆà¸²à¸™à¸—à¸§à¸™à¸­à¸µà¸à¸™à¸´à¸”':'ðŸ“– à¸¢à¸±à¸‡à¸•à¹‰à¸­à¸‡à¸—à¸šà¸—à¸§à¸™ à¸¥à¸­à¸‡à¸­à¹ˆà¸²à¸™à¹€à¸‰à¸¥à¸¢à¹à¸¥à¹‰à¸§à¸—à¸³à¹ƒà¸«à¸¡à¹ˆ';
+    sc.innerHTML='<span class="big">'+correct+'/'+QUIZ.length+' ('+pct+'%)</span>'+msg;
+    sc.style.display='block';
+    sc.scrollIntoView({behavior:'smooth',block:'center'});
+  });
+  document.getElementById('quiz-reset').addEventListener('click',function(){
+    [].forEach.call(host.querySelectorAll('.opt'),function(o){o.classList.remove('correct','wrong','sel');});
+    [].forEach.call(host.querySelectorAll('input:checked'),function(i){i.checked=false;});
+    [].forEach.call(host.querySelectorAll('.expl'),function(x){x.classList.remove('show');});
+    document.getElementById('quiz-score').style.display='none';
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+})();
+
+/* ---------- FLASHCARDS ---------- */
+var FC=[
+ {q:'à¸‚à¹‰à¸­à¸ªà¸­à¸š P1 à¸à¸µà¹ˆà¸‚à¹‰à¸­ / à¹€à¸§à¸¥à¸²à¹€à¸—à¹ˆà¸²à¹„à¸£?',a:'100 à¸‚à¹‰à¸­ Â· 2 à¸Šà¸±à¹ˆà¸§à¹‚à¸¡à¸‡ 30 à¸™à¸²à¸—à¸µ Â· à¸›à¸£à¸™à¸±à¸¢ 4 à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸'},
+ {q:'à¹€à¸à¸“à¸‘à¹Œà¸œà¹ˆà¸²à¸™ P1?',a:'70% à¸‚à¸­à¸‡à¸„à¸°à¹à¸™à¸™à¸£à¸§à¸¡ à¹à¸¥à¸° 70% à¸‚à¸­à¸‡à¸«à¸¡à¸§à¸”à¸—à¸µà¹ˆ 2 (à¸žà¸£à¹‰à¸­à¸¡à¸à¸±à¸™)'},
+ {q:'DR à¸„à¸¸à¸¡à¸£à¸²à¸„à¸²à¹à¸šà¸šà¹ƒà¸”?',a:'Ceiling & Floor Â±30% à¸ˆà¸²à¸à¸£à¸²à¸„à¸²à¸›à¸´à¸”à¸§à¸±à¸™à¸à¹ˆà¸­à¸™'},
+ {q:'DRx à¸„à¸¸à¸¡à¸£à¸²à¸„à¸²à¹à¸šà¸šà¹ƒà¸”?',a:'Dynamic Price Band Â±10% à¸‚à¸­à¸‡à¸£à¸²à¸„à¸²à¹€à¸‰à¸¥à¸µà¹ˆà¸¢ 5 à¸™à¸²à¸—à¸µà¸à¹ˆà¸­à¸™à¸«à¸™à¹‰à¸²'},
+ {q:'DRx à¸‹à¸·à¹‰à¸­à¸‚à¸±à¹‰à¸™à¸•à¹ˆà¸³à¹€à¸—à¹ˆà¸²à¹„à¸£?',a:'0.0001 à¸«à¸™à¹ˆà¸§à¸¢ (à¸‹à¸·à¹‰à¸­à¹€à¸›à¹‡à¸™à¹€à¸¨à¸©à¸«à¸™à¹ˆà¸§à¸¢à¸«à¸£à¸·à¸­à¸£à¸°à¸šà¸¸à¸ˆà¸³à¸™à¸§à¸™à¹€à¸‡à¸´à¸™à¹„à¸”à¹‰)'},
+ {q:'à¸ªà¸´à¸™à¸—à¸£à¸±à¸žà¸¢à¹Œà¸”à¸´à¸ˆà¸´à¸—à¸±à¸¥ 3 à¸Šà¹ˆà¸­à¸‡à¸—à¸²à¸‡à¸‹à¸·à¹‰à¸­à¸‚à¸²à¸¢?',a:'à¸¨à¸¹à¸™à¸¢à¹Œà¸‹à¸·à¹‰à¸­à¸‚à¸²à¸¢ (exchange) Â· à¸™à¸²à¸¢à¸«à¸™à¹‰à¸² (broker) Â· à¸œà¸¹à¹‰à¸„à¹‰à¸² (dealer)'},
+ {q:'à¸„à¸§à¸²à¸¡à¹€à¸ªà¸µà¹ˆà¸¢à¸‡ 4 à¹à¸šà¸šà¸‚à¸­à¸‡à¸ªà¸´à¸™à¸—à¸£à¸±à¸žà¸¢à¹Œà¸”à¸´à¸ˆà¸´à¸—à¸±à¸¥?',a:'à¸£à¸²à¸„à¸²à¸œà¸±à¸™à¸œà¸§à¸™ Â· à¸ à¸±à¸¢à¹„à¸‹à¹€à¸šà¸­à¸£à¹Œ Â· à¸¡à¸´à¸ˆà¸‰à¸²à¸Šà¸µà¸ž Â· Private Key à¸«à¸²à¸¢'},
+ {q:'ESG à¸¢à¹ˆà¸­à¸¡à¸²à¸ˆà¸²à¸à¸­à¸°à¹„à¸£?',a:'Environmental Â· Social Â· Governance (à¸ªà¸´à¹ˆà¸‡à¹à¸§à¸”à¸¥à¹‰à¸­à¸¡/à¸ªà¸±à¸‡à¸„à¸¡/à¸šà¸£à¸£à¸©à¸±à¸—à¸ à¸´à¸šà¸²à¸¥)'},
+ {q:'4 à¹à¸™à¸§à¸—à¸²à¸‡à¸à¸²à¸£à¸¥à¸‡à¸—à¸¸à¸™à¸¢à¸±à¹ˆà¸‡à¸¢à¸·à¸™?',a:'ESG Screening Â· Integration Â· Thematic Â· Impact'},
+ {q:'à¸•à¸£à¸²à¸ªà¸²à¸£à¸«à¸™à¸µà¹‰ ESG 4 à¸›à¸£à¸°à¹€à¸ à¸—?',a:'Green Â· Social Â· Sustainability Â· Sustainability-linked Bond'},
+ {q:'à¸—à¸¸à¸™à¸Šà¸³à¸£à¸°à¹à¸¥à¹‰à¸§à¸‚à¸±à¹‰à¸™à¸•à¹ˆà¸³: SET / mai?',a:'SET â‰¥ 300 à¸¥à¹‰à¸²à¸™à¸šà¸²à¸— Â· mai â‰¥ 20 à¸¥à¹‰à¸²à¸™à¸šà¸²à¸— (à¸«à¸¥à¸±à¸‡ IPO)'},
+ {q:'LiVEx à¸‹à¸·à¹‰à¸­à¸‚à¸²à¸¢à¸­à¸¢à¹ˆà¸²à¸‡à¹„à¸£?',a:'Auction à¸§à¸±à¸™à¸¥à¸° 1 à¸£à¸­à¸š (9.30â€“11.00) Â· à¹„à¸¡à¹ˆà¸¡à¸µ ceiling/floor à¹à¸¥à¸° Circuit Breaker'},
+ {q:'GM à¸à¸±à¸š AM à¸­à¸±à¸™à¹„à¸«à¸™à¸¡à¸²à¸à¸à¸§à¹ˆà¸²?',a:'AM â‰¥ GM à¹€à¸ªà¸¡à¸­ (à¸¢à¸´à¹ˆà¸‡à¸œà¸±à¸™à¸œà¸§à¸™à¸¡à¸²à¸ à¸¢à¸´à¹ˆà¸‡à¸«à¹ˆà¸²à¸‡à¸à¸±à¸™)'},
+ {q:'à¸ªà¸¹à¸•à¸£ CAPM?',a:'E(R) = Rf + Î²(Rm âˆ’ Rf)'},
+ {q:'Correlation (Ï) à¸­à¸¢à¸¹à¹ˆà¹ƒà¸™à¸Šà¹ˆà¸§à¸‡à¹ƒà¸”?',a:'âˆ’1 à¸–à¸¶à¸‡ +1'},
+ {q:'Sharpe vs Treynor à¹ƒà¸Šà¹‰à¸•à¸±à¸§à¸«à¸²à¸£à¸•à¹ˆà¸²à¸‡à¸à¸±à¸™à¸¢à¸±à¸‡à¹„à¸‡?',a:'Sharpe à¹ƒà¸Šà¹‰ Ïƒ (à¸„à¸§à¸²à¸¡à¹€à¸ªà¸µà¹ˆà¸¢à¸‡à¸£à¸§à¸¡) Â· Treynor à¹ƒà¸Šà¹‰ Î² (à¸„à¸§à¸²à¸¡à¹€à¸ªà¸µà¹ˆà¸¢à¸‡à¹€à¸›à¹‡à¸™à¸£à¸°à¸šà¸š)'},
+ {q:'à¸ªà¹ˆà¸‡à¸‡à¸šà¸à¸²à¸£à¹€à¸‡à¸´à¸™à¹„à¸•à¸£à¸¡à¸²à¸ª (à¸ªà¸­à¸šà¸—à¸²à¸™) à¸ à¸²à¸¢à¹ƒà¸™à¸à¸µà¹ˆà¸§à¸±à¸™?',a:'à¸ à¸²à¸¢à¹ƒà¸™ 45 à¸§à¸±à¸™ à¸™à¸±à¸šà¸ˆà¸²à¸à¸§à¸±à¸™à¸ªà¸¸à¸”à¸—à¹‰à¸²à¸¢à¸‚à¸­à¸‡à¹„à¸•à¸£à¸¡à¸²à¸ª'},
+ {q:'à¹à¸šà¸š 56-1 One Report à¸ªà¹ˆà¸‡à¸ à¸²à¸¢à¹ƒà¸™à¹€à¸¡à¸·à¹ˆà¸­à¹„à¸£?',a:'à¸ à¸²à¸¢à¹ƒà¸™ 3 à¹€à¸”à¸·à¸­à¸™ à¸™à¸±à¸šà¸ˆà¸²à¸à¸§à¸±à¸™à¸ªà¸´à¹‰à¸™à¸£à¸­à¸šà¸šà¸±à¸à¸Šà¸µ'},
+ {q:'à¹‚à¸—à¸©à¸—à¸²à¸‡à¹à¸žà¹ˆà¸‡: à¸«à¹‰à¸²à¸¡à¸‹à¸·à¹‰à¸­à¸‚à¸²à¸¢/à¸«à¹‰à¸²à¸¡à¹€à¸›à¹‡à¸™à¸à¸£à¸£à¸¡à¸à¸²à¸£ à¸™à¸²à¸™à¸ªà¸¸à¸”à¸à¸µà¹ˆà¸›à¸µ?',a:'à¸«à¹‰à¸²à¸¡à¸‹à¸·à¹‰à¸­à¸‚à¸²à¸¢ â‰¤ 5 à¸›à¸µ Â· à¸«à¹‰à¸²à¸¡à¹€à¸›à¹‡à¸™à¸à¸£à¸£à¸¡à¸à¸²à¸£/à¸œà¸¹à¹‰à¸šà¸£à¸´à¸«à¸²à¸£ â‰¤ 10 à¸›à¸µ'},
+ {q:'à¸«à¸¥à¸±à¸à¸—à¸£à¸±à¸žà¸¢à¹Œà¸–à¸¹à¸ SP à¸à¸µà¹ˆà¸§à¸±à¸™à¸ˆà¸¶à¸‡à¸–à¸¹à¸à¸•à¸±à¸”à¸ˆà¸²à¸à¸à¸²à¸£à¸„à¸³à¸™à¸§à¸“à¸”à¸±à¸Šà¸™à¸µ?',a:'à¸–à¸¹à¸ SP à¸•à¸±à¹‰à¸‡à¹à¸•à¹ˆ 20 à¸§à¸±à¸™à¸—à¸³à¸à¸²à¸£à¸‚à¸¶à¹‰à¸™à¹„à¸›'},
+];
+(function(){
+  var idx=0,flip=false;
+  var fc=document.getElementById('fc'),q=document.getElementById('fc-q'),a=document.getElementById('fc-a'),cnt=document.getElementById('fc-count');
+  function show(){q.textContent=FC[idx].q;a.textContent=FC[idx].a;cnt.textContent=(idx+1)+' / '+FC.length;flip=false;fc.classList.remove('flip');}
+  fc.addEventListener('click',function(){flip=!flip;fc.classList.toggle('flip',flip);});
+  document.getElementById('fc-prev').addEventListener('click',function(){idx=(idx-1+FC.length)%FC.length;show();});
+  document.getElementById('fc-next').addEventListener('click',function(){idx=(idx+1)%FC.length;show();});
+  show();
+})();
+</script>
+
+</body>
+</html>
+
